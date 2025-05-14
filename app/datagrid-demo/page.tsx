@@ -2,27 +2,39 @@
 
 import React, { useState } from 'react';
 import { DataGrid, ColumnRef, Row } from '@/modules/shared/dataGrid';
-import { StarRatingCell, StarRatingEditor } from '@/modules/shared/dataGridExtensions/cells';
+import { StarRatingCell, StarRatingEditor, AssigneeCell, User } from '@/modules/shared/dataGridExtensions/cells';
 
 export default function DataGridDemo() {
+  // Sample users for assignees
+  const users: User[] = [
+    { id: 1, name: 'Tony Stark', imgURL: 'https://randomuser.me/api/portraits/men/1.jpg' },
+    { id: 2, name: 'Steve Rogers', imgURL: 'https://randomuser.me/api/portraits/men/2.jpg' },
+    { id: 3, name: 'Bruce Banner', imgURL: 'https://randomuser.me/api/portraits/men/3.jpg' },
+    { id: 4, name: 'Natasha Romanoff', imgURL: 'https://randomuser.me/api/portraits/women/4.jpg' },
+    { id: 5, name: 'Clint Barton', imgURL: 'https://randomuser.me/api/portraits/men/5.jpg' },
+    { id: 6, name: 'Thor Odinson' }, // No image URL to test fallback to initials
+    { id: 7, name: 'Peter Parker', imgURL: 'https://randomuser.me/api/portraits/men/7.jpg' },
+    { id: 8, name: 'Wanda Maximoff', imgURL: 'https://randomuser.me/api/portraits/women/8.jpg' },
+  ];
+
   // Define initial rows data
   const initialRows = [
-    // Random order of different ages and names
-    { id: 8, lastName: 'Wayne', firstName: 'Bruce', age: 31, birthDate: '1980-02-19', fullName: 'Bruce Wayne', rating: 5 },
-    { id: 3, lastName: 'Allen', firstName: 'Barry', age: 11, birthDate: '1995-01-20', fullName: 'Barry Allen', rating: 4 },
-    { id: 11, lastName: 'Clifford', firstName: 'Ferrara', age: 44, birthDate: '1978-04-19', fullName: 'Ferrara Clifford', rating: 3 },
-    { id: 5, lastName: 'Kent', firstName: 'Clark', age: 14, birthDate: '1990-06-18', fullName: 'Clark Kent', rating: 5 },
-    { id: 14, lastName: 'Targaryen', firstName: 'Daenerys', age: null, birthDate: '1992-05-12', fullName: 'Daenerys Targaryen', rating: 4 },
-    { id: 9, lastName: 'Frances', firstName: 'Rossini', age: 36, birthDate: '1986-07-12', fullName: 'Frances Rossini', rating: 2 },
-    { id: 7, lastName: 'Lannister', firstName: 'Jaime', age: 31, birthDate: '1980-06-23', fullName: 'Jaime Lannister', rating: 3 },
-    { id: 4, lastName: 'Snow', firstName: 'Jon', age: 14, birthDate: '1990-01-15', fullName: 'Jon Snow', rating: 4 },
-    { id: 15, lastName: 'Melisandre', firstName: null, age: 150, birthDate: '1870-01-01', fullName: 'Melisandre', rating: 5 },
-    { id: 2, lastName: 'Parker', firstName: 'Peter', age: 11, birthDate: '1995-05-15', fullName: 'Peter Parker', rating: 4 },
-    { id: 13, lastName: 'Roxie', firstName: 'Harvey', age: 65, birthDate: '1957-12-25', fullName: 'Roxie Harvey', rating: 1 },
-    { id: 10, lastName: 'Rogers', firstName: 'Steve', age: 36, birthDate: '1986-07-04', fullName: 'Steve Rogers', rating: 5 },
-    { id: 1, lastName: 'Stark', firstName: 'Arya', age: 11, birthDate: '1995-03-10', fullName: 'Arya Stark', rating: 4 },
-    { id: 12, lastName: 'Stark', firstName: 'Tony', age: 44, birthDate: '1978-05-29', fullName: 'Tony Stark', rating: 5 },
-    { id: 6, lastName: 'Lannister', firstName: 'Cersei', age: 31, birthDate: '1980-06-23', fullName: 'Cersei Lannister', rating: 2 },
+    // Random order of different ages and names with assignees
+    { id: 8, lastName: 'Wayne', firstName: 'Bruce', age: 31, birthDate: '1980-02-19', fullName: 'Bruce Wayne', rating: 5, assignee: [users[0], users[1], users[2]] },
+    { id: 3, lastName: 'Allen', firstName: 'Barry', age: 11, birthDate: '1995-01-20', fullName: 'Barry Allen', rating: 4, assignee: [users[3], users[4]] },
+    { id: 11, lastName: 'Clifford', firstName: 'Ferrara', age: 44, birthDate: '1978-04-19', fullName: 'Ferrara Clifford', rating: 3, assignee: [users[5]] },
+    { id: 5, lastName: 'Kent', firstName: 'Clark', age: 14, birthDate: '1990-06-18', fullName: 'Clark Kent', rating: 5, assignee: [users[0], users[2], users[4], users[6]] },
+    { id: 14, lastName: 'Targaryen', firstName: 'Daenerys', age: null, birthDate: '1992-05-12', fullName: 'Daenerys Targaryen', rating: 4, assignee: [] },
+    { id: 9, lastName: 'Frances', firstName: 'Rossini', age: 36, birthDate: '1986-07-12', fullName: 'Frances Rossini', rating: 2, assignee: [users[1], users[3]] },
+    { id: 7, lastName: 'Lannister', firstName: 'Jaime', age: 31, birthDate: '1980-06-23', fullName: 'Jaime Lannister', rating: 3, assignee: [users[7]] },
+    { id: 4, lastName: 'Snow', firstName: 'Jon', age: 14, birthDate: '1990-01-15', fullName: 'Jon Snow', rating: 4, assignee: [users[0], users[1], users[2], users[3], users[4]] },
+    { id: 15, lastName: 'Melisandre', firstName: null, age: 150, birthDate: '1870-01-01', fullName: 'Melisandre', rating: 5, assignee: [users[6]] },
+    { id: 2, lastName: 'Parker', firstName: 'Peter', age: 11, birthDate: '1995-05-15', fullName: 'Peter Parker', rating: 4, assignee: [users[0], users[5]] },
+    { id: 13, lastName: 'Roxie', firstName: 'Harvey', age: 65, birthDate: '1957-12-25', fullName: 'Roxie Harvey', rating: 1, assignee: [] },
+    { id: 10, lastName: 'Rogers', firstName: 'Steve', age: 36, birthDate: '1986-07-04', fullName: 'Steve Rogers', rating: 5, assignee: [users[2], users[7]] },
+    { id: 1, lastName: 'Stark', firstName: 'Arya', age: 11, birthDate: '1995-03-10', fullName: 'Arya Stark', rating: 4, assignee: [users[1]] },
+    { id: 12, lastName: 'Stark', firstName: 'Tony', age: 44, birthDate: '1978-05-29', fullName: 'Tony Stark', rating: 5, assignee: [users[3], users[4], users[5]] },
+    { id: 6, lastName: 'Lannister', firstName: 'Cersei', age: 31, birthDate: '1980-06-23', fullName: 'Cersei Lannister', rating: 2, assignee: [users[0], users[2]] },
   ];
 
   // Initialize state with the data
@@ -168,6 +180,22 @@ export default function DataGridDemo() {
       }
     },
     {
+      field: 'assignee',
+      headerName: 'Assignees',
+      minWidth: 300,
+      // Custom cell renderer to display assignees with compact view
+      renderCell: (value) => (
+        <AssigneeCell users={value || []} compactLimit={1} />
+      ),
+      // Custom sorting by number of assignees
+      sortComparator: (a: Row, b: Row, _field: string, isAscending: boolean) => {
+        const aLength = a.assignee?.length || 0;
+        const bLength = b.assignee?.length || 0;
+
+        return isAscending ? aLength - bLength : bLength - aLength;
+      }
+    },
+    {
       field: 'birthDate',
       headerName: 'Birth Date',
       type: 'date',
@@ -180,30 +208,30 @@ export default function DataGridDemo() {
         return !isNaN(date.getTime()) && date <= new Date();
       }
     },
-    {
-      field: 'rating',
-      headerName: 'Rating',
-      align: 'center',
-      minWidth: 180,
-      editable: true, // Make this column editable
-      // Custom cell renderer to display stars
-      renderCell: (value) => (
-        <StarRatingCell value={value || 0} maxRating={5} />
-      ),
-      // Custom cell editor using the editableCell prop
-      editableCell: ({ value, onSave, onCancel }) => (
-        <StarRatingEditor
-          config={{
-            value: value || 0,
-            maxRating: 5,
-            onSave: onSave,
-            onCancel: onCancel // Pass the onCancel function from the DataGrid
-          }}
-        />
-      ),
-      // Validate that the rating is between 0 and 5
-      valueValidator: (value) => value >= 0 && value <= 5
-    },
+    // {
+    //   field: 'rating',
+    //   headerName: 'Rating',
+    //   align: 'center',
+    //   minWidth: 180,
+    //   editable: true, // Make this column editable
+    //   // Custom cell renderer to display stars
+    //   renderCell: (value) => (
+    //     <StarRatingCell value={value || 0} maxRating={5} />
+    //   ),
+    //   // Custom cell editor using the editableCell prop
+    //   editableCell: ({ value, onSave, onCancel }) => (
+    //     <StarRatingEditor
+    //       config={{
+    //         value: value || 0,
+    //         maxRating: 5,
+    //         onSave: onSave,
+    //         onCancel: onCancel // Pass the onCancel function from the DataGrid
+    //       }}
+    //     />
+    //   ),
+    //   // Validate that the rating is between 0 and 5
+    //   valueValidator: (value) => value >= 0 && value <= 5
+    // },
   ];
 
   // No need for useEffect since we're initializing the state directly
