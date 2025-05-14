@@ -1,4 +1,4 @@
-import { ColumnRef, Row, SortModel } from '../types/type';
+import { ColumnRef, Row, SortModel, SortComparator } from '../types/type';
 
 /**
  * Sort number values
@@ -73,6 +73,11 @@ export const sortRows = (rows: Row[], sortModel: SortModel | null, columns: Colu
   const isAscending = direction === 'asc';
 
   return [...rows].sort((a, b) => {
+    // If a custom sort comparator is provided, use it
+    if (column.sortComparator) {
+      return column.sortComparator(a, b, field, isAscending);
+    }
+
     // Get values using valueGetter if provided
     const valueA = getCellValue(a, column);
     const valueB = getCellValue(b, column);

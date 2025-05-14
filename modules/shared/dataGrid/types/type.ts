@@ -10,6 +10,13 @@ export type SortDirection = 'asc' | 'desc' | null;
 export type CellRenderer = (value: any, row: Row, column: ColumnRef) => React.ReactNode;
 
 /**
+ * Type for custom sort comparator function
+ * Receives two rows, the field to sort by, and whether sorting is ascending
+ * Returns negative if a should come before b, positive if b should come before a, 0 if equal
+ */
+export type SortComparator = (a: Row, b: Row, field: string, isAscending: boolean) => number;
+
+/**
  * Configuration for a column in the DataGrid
  */
 export interface ColumnRef {
@@ -46,6 +53,23 @@ export interface ColumnRef {
    * - Set default values for null/undefined fields
    */
   valueGetter?: (row: Row) => any;
+
+  /**
+   * Custom sort comparator function for this column.
+   * Allows complete control over the sorting logic for this column.
+   * If provided, this overrides the default sorting logic based on column type.
+   *
+   * Example usage:
+   * ```
+   * sortComparator: (a, b, field, isAscending) => {
+   *   // Custom comparison logic
+   *   const valueA = a[field].toLowerCase();
+   *   const valueB = b[field].toLowerCase();
+   *   return isAscending ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+   * }
+   * ```
+   */
+  sortComparator?: SortComparator;
 }
 
 /**
