@@ -1,5 +1,5 @@
 import React from 'react';
-import { ColumnRef, Row } from './types';
+import { ColumnRef, Row } from './types/type';
 import CellRenderer from './CellRenderer';
 
 interface DataRowProps {

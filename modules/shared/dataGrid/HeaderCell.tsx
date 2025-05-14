@@ -1,5 +1,5 @@
 import React from 'react';
-import { ColumnRef, SortDirection } from './types';
+import { ColumnRef, SortDirection } from './types/type';
 import Icon from '../icons';
 import { Tooltip } from '../tooltip';
 
@@ -13,10 +13,10 @@ interface HeaderCellProps {
  * HeaderCell component for DataGrid
  * Handles rendering and sorting functionality for a column header
  */
-const HeaderCell: React.FC<HeaderCellProps> = ({ 
-  column, 
-  sortDirection, 
-  onSort 
+const HeaderCell: React.FC<HeaderCellProps> = ({
+  column,
+  sortDirection,
+  onSort
 }) => {
   // Get the alignment class based on column configuration
   const getAlignmentClass = (): string => {
@@ -27,7 +27,7 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
         case 'left': return 'justify-start';
       }
     }
-    
+
     // Default alignment based on column type
     if (column.type === 'number') return 'justify-center';
     return 'justify-start';
@@ -36,10 +36,10 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
   // Get the sort icon for the column
   const getSortIcon = () => {
     if (column.sortable === false) return null;
-    
+
     let iconName: 'sortAsc' | 'sortDesc' | 'sortDefault' = 'sortDefault';
     let tooltipText = 'Click to sort';
-    
+
     if (sortDirection === 'asc') {
       iconName = 'sortAsc';
       tooltipText = 'Sorted ascending. Click to sort descending';
@@ -51,9 +51,9 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
     return (
       <Tooltip content={tooltipText}>
         <span className="ml-1 inline-flex items-center">
-          <Icon 
-            name={iconName} 
-            size={16} 
+          <Icon
+            name={iconName}
+            size={16}
             className={sortDirection ? 'text-blue-500' : 'text-gray-400'}
           />
         </span>

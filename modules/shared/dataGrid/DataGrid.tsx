@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { ColumnRef, Row, SortModel, SortDirection } from './types';
+import { ColumnRef, Row, SortModel, SortDirection } from './types/type';
 import DataRow from './DataRow';
 import HeaderCell from './HeaderCell';
 import { sortRows } from './utils/sortUtils';

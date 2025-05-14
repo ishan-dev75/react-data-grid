@@ -1,5 +1,5 @@
 import React from 'react';
-import { ColumnRef, Row } from './types';
+import { ColumnRef, Row } from './types/type';
 import StringCell from './cells/StringCell';
 import NumberCell from './cells/NumberCell';
 import DateCell from './cells/DateCell';

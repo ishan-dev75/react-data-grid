@@ -1,4 +1,4 @@
-import { ColumnRef, Row, SortModel } from '../types';
+import { ColumnRef, Row, SortModel } from '../types/type';
 
 /**
  * Sort number values
