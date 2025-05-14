@@ -1,9 +1,21 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { DataGrid, ColumnRef, Row } from '@/modules/shared/dataGrid';
 
 export default function DataGridDemo() {
+  const [demoRows, setDemoRows] = useState<Row[]>([]);
+
+  // Handle cell value changes
+  const handleCellValueChange = (rowId: any, field: string, value: any) => {
+    console.log(`Cell value changed: rowId=${rowId}, field=${field}, value=${value}`);
+    setDemoRows(prevRows =>
+      prevRows.map(row =>
+        row.id === rowId ? { ...row, [field]: value } : row
+      )
+    );
+  };
+
   const columns: ColumnRef[] = [
     {
       field: 'id',
@@ -15,25 +27,31 @@ export default function DataGridDemo() {
     {
       field: 'firstName',
       headerName: 'First name',
-      type: 'string'
+      type: 'string',
+      editable: true, // Make this column editable
+      valueValidator: (value) => value !== null && value !== '' // Validate that the value is not empty
     },
     {
       field: 'lastName',
       headerName: 'Last name',
       type: 'string',
-      align: 'center'
+      align: 'center',
+      editable: true
     },
     {
       field: 'age',
       headerName: 'Age',
       type: 'number',
       minWidth: 50,
+      editable: true, // Make this column editable
       // Example of custom cell rendering with conditional styling
       renderCell: (value) => (
         <div className={`px-4 py-2 text-center ${value < 18 ? 'text-red-500 font-bold' : value > 60 ? 'text-blue-500 font-bold' : ''}`}>
           {value !== null && value !== undefined ? value : ''}
         </div>
-      )
+      ),
+      // Validate that the value is a positive number or null
+      valueValidator: (value) => value === null || (typeof value === 'number' && value >= 0)
     },
     {
       field: 'fullName',
@@ -131,11 +149,19 @@ export default function DataGridDemo() {
       field: 'birthDate',
       headerName: 'Birth Date',
       type: 'date',
-      align: 'right'
+      align: 'right',
+      editable: true, // Make this column editable
+      // Validate that the date is not in the future
+      valueValidator: (value) => {
+        if (!value) return true;
+        const date = new Date(value);
+        return !isNaN(date.getTime()) && date <= new Date();
+      }
     },
   ];
 
-  const rows = [
+  // Initialize the state with the demo data
+  const initialRows = [
     // Random order of different ages and names
     { id: 8, lastName: 'Wayne', firstName: 'Bruce', age: 31, birthDate: '1980-02-19', fullName: 'Bruce Wayne' },
     { id: 3, lastName: 'Allen', firstName: 'Barry', age: 11, birthDate: '1995-01-20', fullName: 'Barry Allen' },
@@ -154,17 +180,22 @@ export default function DataGridDemo() {
     { id: 6, lastName: 'Lannister', firstName: 'Cersei', age: 31, birthDate: '1980-06-23', fullName: 'Cersei Lannister' },
   ];
 
+  // Initialize the state with the demo data
+  React.useEffect(() => {
+    setDemoRows(initialRows);
+  }, []);
+
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">DataGrid Demo with Advanced Sorting</h1>
-      <p className="mb-4 text-gray-600">
-        Click on column headers to sort. Hover over sort icons for more information.
-        <br />
-        <strong>Full Name column:</strong> Demonstrates multi-criteria sorting (first by age, then by name).
-        <br />
-        <strong>Status column:</strong> Demonstrates custom sort order (Minor → Adult → Senior → Unknown).
-      </p>
-      <DataGrid columns={columns} rows={rows} />
+      <h1 className="text-2xl font-bold mb-4">DataGrid Demo with Editable Cells</h1>
+      <p className="mb-4 text-gray-600">Double-click on a cell to edit its value. Press Enter to save or Escape to cancel.</p>
+      <div className='h-[calc(100vh-8rem)] overflow-auto'>
+        <DataGrid
+          columns={columns}
+          rows={demoRows}
+          onCellValueChange={handleCellValueChange}
+        />
+      </div>
     </div>
   );
 }

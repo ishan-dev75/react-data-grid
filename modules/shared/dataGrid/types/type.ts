@@ -17,6 +17,24 @@ export type CellRenderer = (value: any, row: Row, column: ColumnRef) => React.Re
 export type SortComparator = (a: Row, b: Row, field: string, isAscending: boolean) => number;
 
 /**
+ * Type for custom cell editor function
+ * Receives the current value, the row data, the column definition, and a callback to save the edited value
+ * Returns a React component for editing the cell value
+ */
+export type CellEditor = (
+  value: any,
+  row: Row,
+  column: ColumnRef,
+  onSave: (newValue: any) => void
+) => React.ReactNode;
+
+/**
+ * Type for value validator function
+ * Receives the new value and returns true if valid, false if invalid
+ */
+export type ValueValidator = (value: any) => boolean;
+
+/**
  * Configuration for a column in the DataGrid
  */
 export interface ColumnRef {
@@ -70,6 +88,39 @@ export interface ColumnRef {
    * ```
    */
   sortComparator?: SortComparator;
+
+  /** Whether the column is editable (defaults to false) */
+  editable?: boolean;
+
+  /**
+   * Custom editor function for the cell.
+   * If provided, this overrides the default editor based on column type.
+   *
+   * Example usage:
+   * ```
+   * editableCell: (value, row, column, onSave) => (
+   *   <CustomEditor
+   *     initialValue={value}
+   *     onSave={onSave}
+   *   />
+   * )
+   * ```
+   */
+  editableCell?: CellEditor;
+
+  /**
+   * Validator function for the cell value.
+   * If provided, this is used to validate the value before saving.
+   *
+   * Example usage:
+   * ```
+   * valueValidator: (value) => {
+   *   // Custom validation logic
+   *   return value !== null && value !== '';
+   * }
+   * ```
+   */
+  valueValidator?: ValueValidator;
 }
 
 /**
