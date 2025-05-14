@@ -2,9 +2,32 @@
 
 import React, { useState } from 'react';
 import { DataGrid, ColumnRef, Row } from '@/modules/shared/dataGrid';
+import StarRatingCell from '@/modules/shared/dataGrid/cells/custom/StarRatingCell';
+import StarRatingEditor from '@/modules/shared/dataGrid/cells/editable/custom/StarRatingEditor';
 
 export default function DataGridDemo() {
-  const [demoRows, setDemoRows] = useState<Row[]>([]);
+  // Define initial rows data
+  const initialRows = [
+    // Random order of different ages and names
+    { id: 8, lastName: 'Wayne', firstName: 'Bruce', age: 31, birthDate: '1980-02-19', fullName: 'Bruce Wayne', rating: 5 },
+    { id: 3, lastName: 'Allen', firstName: 'Barry', age: 11, birthDate: '1995-01-20', fullName: 'Barry Allen', rating: 4 },
+    { id: 11, lastName: 'Clifford', firstName: 'Ferrara', age: 44, birthDate: '1978-04-19', fullName: 'Ferrara Clifford', rating: 3 },
+    { id: 5, lastName: 'Kent', firstName: 'Clark', age: 14, birthDate: '1990-06-18', fullName: 'Clark Kent', rating: 5 },
+    { id: 14, lastName: 'Targaryen', firstName: 'Daenerys', age: null, birthDate: '1992-05-12', fullName: 'Daenerys Targaryen', rating: 4 },
+    { id: 9, lastName: 'Frances', firstName: 'Rossini', age: 36, birthDate: '1986-07-12', fullName: 'Frances Rossini', rating: 2 },
+    { id: 7, lastName: 'Lannister', firstName: 'Jaime', age: 31, birthDate: '1980-06-23', fullName: 'Jaime Lannister', rating: 3 },
+    { id: 4, lastName: 'Snow', firstName: 'Jon', age: 14, birthDate: '1990-01-15', fullName: 'Jon Snow', rating: 4 },
+    { id: 15, lastName: 'Melisandre', firstName: null, age: 150, birthDate: '1870-01-01', fullName: 'Melisandre', rating: 5 },
+    { id: 2, lastName: 'Parker', firstName: 'Peter', age: 11, birthDate: '1995-05-15', fullName: 'Peter Parker', rating: 4 },
+    { id: 13, lastName: 'Roxie', firstName: 'Harvey', age: 65, birthDate: '1957-12-25', fullName: 'Roxie Harvey', rating: 1 },
+    { id: 10, lastName: 'Rogers', firstName: 'Steve', age: 36, birthDate: '1986-07-04', fullName: 'Steve Rogers', rating: 5 },
+    { id: 1, lastName: 'Stark', firstName: 'Arya', age: 11, birthDate: '1995-03-10', fullName: 'Arya Stark', rating: 4 },
+    { id: 12, lastName: 'Stark', firstName: 'Tony', age: 44, birthDate: '1978-05-29', fullName: 'Tony Stark', rating: 5 },
+    { id: 6, lastName: 'Lannister', firstName: 'Cersei', age: 31, birthDate: '1980-06-23', fullName: 'Cersei Lannister', rating: 2 },
+  ];
+
+  // Initialize state with the data
+  const [demoRows, setDemoRows] = useState<Row[]>(initialRows);
 
   // Handle cell value changes
   const handleCellValueChange = (rowId: any, field: string, value: any) => {
@@ -158,32 +181,31 @@ export default function DataGridDemo() {
         return !isNaN(date.getTime()) && date <= new Date();
       }
     },
+    {
+      field: 'rating',
+      headerName: 'Rating',
+      align: 'center',
+      minWidth: 180,
+      editable: true, // Make this column editable
+      // Custom cell renderer to display stars
+      renderCell: (value) => (
+        <StarRatingCell value={value || 0} maxRating={5} />
+      ),
+      // Custom cell editor using the editableCell prop
+      editableCell: (value, _row, _column, onSave) => (
+        <StarRatingEditor
+          value={value || 0}
+          maxRating={5}
+          onSave={onSave}
+          onCancel={() => {}} // We don't need to do anything on cancel
+        />
+      ),
+      // Validate that the rating is between 0 and 5
+      valueValidator: (value) => value >= 0 && value <= 5
+    },
   ];
 
-  // Initialize the state with the demo data
-  const initialRows = [
-    // Random order of different ages and names
-    { id: 8, lastName: 'Wayne', firstName: 'Bruce', age: 31, birthDate: '1980-02-19', fullName: 'Bruce Wayne' },
-    { id: 3, lastName: 'Allen', firstName: 'Barry', age: 11, birthDate: '1995-01-20', fullName: 'Barry Allen' },
-    { id: 11, lastName: 'Clifford', firstName: 'Ferrara', age: 44, birthDate: '1978-04-19', fullName: 'Ferrara Clifford' },
-    { id: 5, lastName: 'Kent', firstName: 'Clark', age: 14, birthDate: '1990-06-18', fullName: 'Clark Kent' },
-    { id: 14, lastName: 'Targaryen', firstName: 'Daenerys', age: null, birthDate: '1992-05-12', fullName: 'Daenerys Targaryen' },
-    { id: 9, lastName: 'Frances', firstName: 'Rossini', age: 36, birthDate: '1986-07-12', fullName: 'Frances Rossini' },
-    { id: 7, lastName: 'Lannister', firstName: 'Jaime', age: 31, birthDate: '1980-06-23', fullName: 'Jaime Lannister' },
-    { id: 4, lastName: 'Snow', firstName: 'Jon', age: 14, birthDate: '1990-01-15', fullName: 'Jon Snow' },
-    { id: 15, lastName: 'Melisandre', firstName: null, age: 150, birthDate: '1870-01-01', fullName: 'Melisandre' },
-    { id: 2, lastName: 'Parker', firstName: 'Peter', age: 11, birthDate: '1995-05-15', fullName: 'Peter Parker' },
-    { id: 13, lastName: 'Roxie', firstName: 'Harvey', age: 65, birthDate: '1957-12-25', fullName: 'Roxie Harvey' },
-    { id: 10, lastName: 'Rogers', firstName: 'Steve', age: 36, birthDate: '1986-07-04', fullName: 'Steve Rogers' },
-    { id: 1, lastName: 'Stark', firstName: 'Arya', age: 11, birthDate: '1995-03-10', fullName: 'Arya Stark' },
-    { id: 12, lastName: 'Stark', firstName: 'Tony', age: 44, birthDate: '1978-05-29', fullName: 'Tony Stark' },
-    { id: 6, lastName: 'Lannister', firstName: 'Cersei', age: 31, birthDate: '1980-06-23', fullName: 'Cersei Lannister' },
-  ];
-
-  // Initialize the state with the demo data
-  React.useEffect(() => {
-    setDemoRows(initialRows);
-  }, []);
+  // No need for useEffect since we're initializing the state directly
 
   return (
     <div className="container mx-auto p-4">
