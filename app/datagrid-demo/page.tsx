@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { DataGrid, ColumnRef, Row } from '@/modules/shared/dataGrid';
-import { StarRatingCell, StarRatingEditor, AssigneeCell, User } from '@/modules/shared/dataGridExtensions/cells';
+import { StarRatingCell, StarRatingEditor, AssigneeCell, User, CustomDateCell } from '@/modules/shared/dataGridExtensions/cells';
 import DemoNavigation from '@/app/components/DemoNavigation';
 
 export default function DataGridDemo() {
@@ -202,6 +202,15 @@ export default function DataGridDemo() {
       type: 'date',
       align: 'right',
       editable: true, // Make this column editable
+      // Use our custom date cell for editing
+      editableCell: ({ value, onSave, onCancel }) => (
+        <CustomDateCell
+          value={value}
+          onSave={onSave}
+          onCancel={onCancel}
+          align="right"
+        />
+      ),
       // Validate that the date is not in the future
       valueValidator: (value) => {
         if (!value) return true;

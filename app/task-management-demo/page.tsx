@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { DataGrid, ColumnRef, Row } from '@/modules/shared/dataGrid';
-import { AssigneeCell, User, LinkCell } from '@/modules/shared/dataGridExtensions/cells';
+import { AssigneeCell, User, LinkCell, AssigneeEditor, CustomDateCell } from '@/modules/shared/dataGridExtensions/cells';
 import DemoNavigation from '@/app/components/DemoNavigation';
 
 // Define task status and priority types
@@ -404,6 +404,11 @@ export default function TaskManagementDemo() {
         );
       },
       valueValidator: (value) => {
+        // First check if the value contains any non-numeric characters
+        if (typeof value === 'string' && /[^0-9.]/.test(value)) {
+          return false;
+        }
+
         const numValue = Number(value);
         return !isNaN(numValue) && numValue >= 0 && numValue <= 100;
       }
@@ -424,14 +429,34 @@ export default function TaskManagementDemo() {
             </span>
           </div>
         );
-      }
+      },
+      // Use our custom date cell for editing
+      editableCell: ({ value, onSave, onCancel }) => (
+        <CustomDateCell
+          value={value}
+          onSave={onSave}
+          onCancel={onCancel}
+        />
+      )
     },
     {
       field: 'assignee',
       headerName: 'Assignees',
       minWidth: 200,
+      editable: true,
       renderCell: (value) => (
         <AssigneeCell users={value || []} compactLimit={1} />
+      ),
+      // Custom editor for selecting assignees
+      editableCell: ({ value, onSave, onCancel }) => (
+        <AssigneeEditor
+          config={{
+            value: value || [],
+            availableUsers: users, // Pass all available users
+            onSave: onSave,
+            onCancel: onCancel
+          }}
+        />
       ),
       sortComparator: (a: Row, b: Row, _field: string, isAscending: boolean) => {
         const aLength = a.assignee?.length || 0;
