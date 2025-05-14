@@ -25,7 +25,7 @@ const AssigneeCell: React.FC<AssigneeCellProps> = ({
   // If no users, show a placeholder
   if (!users || users.length === 0) {
     return (
-      <div className="px-4 py-2 text-gray-400">
+      <div className="px-4 py-2 text-gray-400 dark:text-gray-500">
         No assignees
       </div>
     );
@@ -50,7 +50,7 @@ const AssigneeCell: React.FC<AssigneeCellProps> = ({
 
     return (
       <div className="flex items-center space-x-2">
-        <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium text-white bg-blue-500 border-2 border-white">
+        <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium text-white bg-blue-500 border-2 border-white dark:border-gray-700">
           {user.imgURL ? (
             <img
               src={user.imgURL}
@@ -61,7 +61,7 @@ const AssigneeCell: React.FC<AssigneeCellProps> = ({
             <span>{initials}</span>
           )}
         </div>
-        <span className="text-sm font-medium">{user.name}</span>
+        <span className="text-sm font-medium dark:text-gray-200">{user.name}</span>
       </div>
     );
   };
@@ -83,7 +83,7 @@ const AssigneeCell: React.FC<AssigneeCellProps> = ({
             <span>{initials}</span>
           )}
         </div>
-        <span className="text-sm font-medium">{user.name}</span>
+        <span className="text-sm font-medium text-white">{user.name}</span>
       </div>
     );
   };
@@ -123,7 +123,7 @@ const AssigneeCell: React.FC<AssigneeCellProps> = ({
             className="bg-gray-800 p-2"
           >
             <div className="flex-shrink-0 cursor-pointer flex items-center">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-white bg-gray-500 border border-white">
+              <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-white bg-gray-500 dark:bg-gray-600 border border-white dark:border-gray-700">
                 +{remainingCount}
               </div>
             </div>

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { DataGrid, ColumnRef, Row } from '@/modules/shared/dataGrid';
 import { StarRatingCell, StarRatingEditor, AssigneeCell, User } from '@/modules/shared/dataGridExtensions/cells';
+import DemoNavigation from '@/app/components/DemoNavigation';
 
 export default function DataGridDemo() {
   // Sample users for assignees
@@ -237,16 +238,19 @@ export default function DataGridDemo() {
   // No need for useEffect since we're initializing the state directly
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">DataGrid Demo with Editable Cells</h1>
-      <p className="mb-4 text-gray-600">Double-click on a cell to edit its value. Press Enter to save or Escape to cancel.</p>
-      <div className='h-[calc(100vh-8rem)] overflow-auto'>
-        <DataGrid
-          columns={columns}
-          rows={demoRows}
-          onCellValueChange={handleCellValueChange}
-        />
+    <>
+      <DemoNavigation />
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4 dark:text-white">DataGrid Demo with Editable Cells</h1>
+        <p className="mb-4 text-gray-600 dark:text-gray-400">Double-click on a cell to edit its value. Press Enter to save or Escape to cancel.</p>
+        <div className='h-[calc(100vh-14rem)] overflow-auto'>
+          <DataGrid
+            columns={columns}
+            rows={demoRows}
+            onCellValueChange={handleCellValueChange}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
