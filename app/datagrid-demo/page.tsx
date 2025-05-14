@@ -5,21 +5,30 @@ import { DataGrid, ColumnRef } from '@/modules/shared/dataGrid';
 
 export default function DataGridDemo() {
   const columns: ColumnRef[] = [
-    { field: 'id', headerName: 'ID', width: 90, type: 'number' },
+    {
+      field: 'id',
+      headerName: 'ID',
+      minWidth: 50,
+      type: 'number',
+      align: 'left'
+    },
     {
       field: 'firstName',
       headerName: 'First name',
-      type: 'string',
+      type: 'string'
     },
     {
       field: 'lastName',
       headerName: 'Last name',
       type: 'string',
+      align: 'center'
     },
     {
       field: 'age',
       headerName: 'Age',
       type: 'number',
+      minWidth: 50,
+
     },
     {
       field: 'fullName',
@@ -30,6 +39,7 @@ export default function DataGridDemo() {
       field: 'birthDate',
       headerName: 'Birth Date',
       type: 'date',
+       align: 'right'
     },
   ];
 

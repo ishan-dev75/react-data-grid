@@ -11,16 +11,24 @@ interface CellRendererProps {
 }
 
 const CellRenderer: React.FC<CellRendererProps> = React.memo(({ column, value }) => {
+  // Get the alignment from the column config or use default based on type
+  const getDefaultAlign = () => {
+    if (column.type === 'number') return 'center';
+    return 'left';
+  };
+
+  const align = column.align || getDefaultAlign();
+
   // Select the appropriate cell component based on column type
   switch (column.type) {
     case 'string':
-      return <StringCell value={value} />;
+      return <StringCell value={value} align={align} />;
     case 'number':
-      return <NumberCell value={value} />;
+      return <NumberCell value={value} align={align} />;
     case 'date':
-      return <DateCell value={value} />;
+      return <DateCell value={value} align={align} />;
     default:
-      return <DefaultCell value={value} />;
+      return <DefaultCell value={value} align={align} />;
   }
 });
 
