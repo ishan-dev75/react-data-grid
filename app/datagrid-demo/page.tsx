@@ -27,19 +27,19 @@ export default function DataGridDemo() {
       field: 'age',
       headerName: 'Age',
       type: 'number',
-      minWidth: 50,
-
+      minWidth: 50
     },
     {
       field: 'fullName',
       headerName: 'Full name',
       type: 'string',
+      sortable: false // Example of a non-sortable column
     },
     {
       field: 'birthDate',
       headerName: 'Birth Date',
       type: 'date',
-       align: 'right'
+      align: 'right'
     },
   ];
 
@@ -57,7 +57,8 @@ export default function DataGridDemo() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">DataGrid Demo</h1>
+      <h1 className="text-2xl font-bold mb-4">DataGrid Demo with Sorting</h1>
+      <p className="mb-4 text-gray-600">Click on column headers to sort. Hover over sort icons for more information.</p>
       <DataGrid columns={columns} rows={rows} />
     </div>
   );

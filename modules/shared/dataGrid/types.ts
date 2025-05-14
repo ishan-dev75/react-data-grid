@@ -1,4 +1,9 @@
 /**
+ * Sort direction for a column
+ */
+export type SortDirection = 'asc' | 'desc' | null;
+
+/**
  * Configuration for a column in the DataGrid
  */
 export interface ColumnRef {
@@ -19,6 +24,20 @@ export interface ColumnRef {
 
   /** Text alignment for the column (defaults to 'left' for string and date, 'center' for number) */
   align?: 'left' | 'center' | 'right';
+
+  /** Whether the column is sortable (defaults to true) */
+  sortable?: boolean;
+}
+
+/**
+ * Sort model for the DataGrid
+ */
+export interface SortModel {
+  /** Field to sort by */
+  field: string;
+
+  /** Sort direction */
+  direction: SortDirection;
 }
 
 /**
