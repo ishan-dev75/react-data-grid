@@ -4,6 +4,12 @@
 export type SortDirection = 'asc' | 'desc' | null;
 
 /**
+ * Type for custom cell renderer function
+ * Receives the cell value, the entire row data, and the column definition
+ */
+export type CellRenderer = (value: any, row: Row, column: ColumnRef) => React.ReactNode;
+
+/**
  * Configuration for a column in the DataGrid
  */
 export interface ColumnRef {
@@ -27,6 +33,19 @@ export interface ColumnRef {
 
   /** Whether the column is sortable (defaults to true) */
   sortable?: boolean;
+
+  /** Custom renderer function for the cell */
+  renderCell?: CellRenderer;
+
+  /**
+   * Custom value getter function to derive or transform the cell value from the row data.
+   * Can be used to:
+   * - Compute values based on multiple fields
+   * - Transform values (e.g., formatting)
+   * - Provide conditional values based on row data
+   * - Set default values for null/undefined fields
+   */
+  valueGetter?: (row: Row) => any;
 }
 
 /**

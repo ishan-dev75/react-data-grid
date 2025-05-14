@@ -12,10 +12,10 @@ interface DataRowProps {
  * DataRow component for DataGrid
  * Renders a single row of data
  */
-const DataRow: React.FC<DataRowProps> = ({ 
-  row, 
-  rowIndex, 
-  columns 
+const DataRow: React.FC<DataRowProps> = ({
+  row,
+  rowIndex,
+  columns
 }) => {
   return (
     <tr
@@ -32,7 +32,7 @@ const DataRow: React.FC<DataRowProps> = ({
         >
           <CellRenderer
             column={column}
-            value={row[column.field]}
+            row={row}
           />
         </td>
       ))}
