@@ -2,8 +2,7 @@
 
 import React, { useState } from 'react';
 import { DataGrid, ColumnRef, Row } from '@/modules/shared/dataGrid';
-import StarRatingCell from '@/modules/shared/dataGrid/cells/custom/StarRatingCell';
-import StarRatingEditor from '@/modules/shared/dataGrid/cells/editable/custom/StarRatingEditor';
+import { StarRatingCell, StarRatingEditor } from '@/modules/shared/dataGridExtensions/cells';
 
 export default function DataGridDemo() {
   // Define initial rows data

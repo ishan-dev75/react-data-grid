@@ -16,6 +16,10 @@ This document provides comprehensive examples of how to use the DataGrid compone
 - [Value Transformation](#value-transformation)
   - [Using valueGetter](#using-valuegetter)
   - [Computed Fields](#computed-fields)
+- [Editable Cells](#editable-cells)
+  - [Basic Editing](#basic-editing)
+  - [Custom Editors](#custom-editors)
+  - [Value Validation](#value-validation)
 - [Sorting](#sorting)
   - [Default Sorting](#default-sorting)
   - [Custom Sorting](#custom-sorting)
@@ -31,9 +35,9 @@ import { DataGrid } from '@/modules/shared/dataGrid';
 
 const columns = [
   { field: 'id', headerName: 'ID', type: 'number' },
-  { field: 'firstName', headerName: 'First Name' },
-  { field: 'lastName', headerName: 'Last Name' },
-  { field: 'age', headerName: 'Age', type: 'number' },
+  { field: 'firstName', headerName: 'First Name', editable: true },
+  { field: 'lastName', headerName: 'Last Name', editable: true },
+  { field: 'age', headerName: 'Age', type: 'number', editable: true },
 ];
 
 const rows = [
@@ -43,10 +47,19 @@ const rows = [
 ];
 
 export default function MyComponent() {
+  const handleCellValueChange = (rowId, field, value) => {
+    console.log(`Cell value changed: rowId=${rowId}, field=${field}, value=${value}`);
+    // Update your data source here
+  };
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-xl font-bold mb-4">Users</h1>
-      <DataGrid columns={columns} rows={rows} />
+      <DataGrid
+        columns={columns}
+        rows={rows}
+        onCellValueChange={handleCellValueChange}
+      />
     </div>
   );
 }
@@ -67,8 +80,11 @@ The `ColumnRef` interface supports the following properties:
 | type | 'string' \| 'number' \| 'date' | No | 'string' | Data type of the column content |
 | align | 'left' \| 'center' \| 'right' | No | Based on type | Text alignment for the column |
 | sortable | boolean | No | true | Whether the column is sortable |
+| editable | boolean | No | false | Whether the column is editable |
 | renderCell | function | No | - | Custom renderer function for the cell |
+| editableCell | function | No | - | Custom editor function for the cell |
 | valueGetter | function | No | - | Function to derive the cell value from the row data |
+| valueValidator | function | No | - | Function to validate edited values before saving |
 | sortComparator | function | No | - | Custom sort comparator function for this column |
 
 ### Column Types
@@ -79,10 +95,10 @@ The DataGrid supports different column types with appropriate formatting and sor
 const columns = [
   // String column (default)
   { field: 'name', headerName: 'Name' },
-  
+
   // Number column
   { field: 'age', headerName: 'Age', type: 'number' },
-  
+
   // Date column
   { field: 'birthDate', headerName: 'Birth Date', type: 'date' },
 ];
@@ -96,10 +112,10 @@ You can control the alignment of column content:
 const columns = [
   // Left alignment (default for string and date)
   { field: 'name', headerName: 'Name', align: 'left' },
-  
+
   // Center alignment (default for number)
   { field: 'age', headerName: 'Age', type: 'number', align: 'center' },
-  
+
   // Right alignment
   { field: 'price', headerName: 'Price', type: 'number', align: 'right' },
 ];
@@ -139,7 +155,7 @@ const columns = [
       let color = 'text-gray-800';
       if (value > 80) color = 'text-green-600 font-bold';
       else if (value < 40) color = 'text-red-600 font-bold';
-      
+
       return <div className={`px-4 py-2 ${color}`}>{value}</div>;
     },
   },
@@ -207,8 +223,8 @@ const columns = [
     valueGetter: (row) => (row.completed / row.total) * 100,
     renderCell: (value) => (
       <div className="w-full bg-gray-200 rounded-full h-2.5">
-        <div 
-          className="bg-blue-600 h-2.5 rounded-full" 
+        <div
+          className="bg-blue-600 h-2.5 rounded-full"
           style={{ width: `${value}%` }}
         ></div>
       </div>
@@ -216,6 +232,100 @@ const columns = [
   },
 ];
 ```
+
+## Editable Cells
+
+The DataGrid supports in-place editing of cell values. Users can double-click on editable cells to enter edit mode, then press Enter to save or Escape to cancel.
+
+### Basic Editing
+
+To make a column editable, set the `editable` property to `true`:
+
+```jsx
+const columns = [
+  { field: 'name', headerName: 'Name', editable: true },
+  { field: 'age', headerName: 'Age', type: 'number', editable: true },
+  { field: 'birthDate', headerName: 'Birth Date', type: 'date', editable: true },
+];
+
+// Handle cell value changes
+const handleCellValueChange = (rowId, field, value) => {
+  console.log(`Row ${rowId}, field ${field} changed to ${value}`);
+  // Update your data source here
+};
+
+<DataGrid
+  columns={columns}
+  rows={rows}
+  onCellValueChange={handleCellValueChange}
+/>
+```
+
+The DataGrid provides type-specific editors:
+- String cells: Text input
+- Number cells: Number input with validation
+- Date cells: Date picker
+
+### Custom Editors
+
+You can create custom editors using the `editableCell` property. For reusable custom editors, it's recommended to create them in a separate module (e.g., `dataGridExtensions`):
+
+```jsx
+// Import custom components from the extensions module
+import { StarRatingCell, StarRatingEditor } from '@/modules/shared/dataGridExtensions/cells';
+
+const columns = [
+  {
+    field: 'rating',
+    headerName: 'Rating',
+    editable: true,
+    // Custom renderer for display mode
+    renderCell: (value) => (
+      <StarRatingCell value={value || 0} maxRating={5} />
+    ),
+    // Custom editor for edit mode
+    editableCell: (value, row, column, onSave) => (
+      <StarRatingEditor
+        value={value || 0}
+        maxRating={5}
+        onSave={onSave}
+        onCancel={() => {}} // We don't need to do anything on cancel
+      />
+    ),
+    // Validate that the rating is between 0 and 5
+    valueValidator: (value) => value >= 0 && value <= 5
+  },
+];
+```
+
+### Value Validation
+
+You can validate edited values before saving using the `valueValidator` property:
+
+```jsx
+const columns = [
+  {
+    field: 'age',
+    headerName: 'Age',
+    type: 'number',
+    editable: true,
+    // Validate that age is between 0 and 120
+    valueValidator: (value) => value >= 0 && value <= 120,
+  },
+  {
+    field: 'email',
+    headerName: 'Email',
+    editable: true,
+    // Validate email format
+    valueValidator: (value) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(value);
+    },
+  },
+];
+```
+
+If validation fails, the cell will display an error state and prevent saving.
 
 ## Sorting
 
@@ -248,21 +358,21 @@ const columns = [
     sortComparator: (a, b, field, isAscending) => {
       const nameA = a[field].split(' ');
       const nameB = b[field].split(' ');
-      
+
       const lastNameA = nameA[nameA.length - 1].toLowerCase();
       const lastNameB = nameB[nameB.length - 1].toLowerCase();
-      
-      const lastNameCompare = isAscending 
-        ? lastNameA.localeCompare(lastNameB) 
+
+      const lastNameCompare = isAscending
+        ? lastNameA.localeCompare(lastNameB)
         : lastNameB.localeCompare(lastNameA);
-      
+
       if (lastNameCompare !== 0) return lastNameCompare;
-      
+
       const firstNameA = nameA[0].toLowerCase();
       const firstNameB = nameB[0].toLowerCase();
-      
-      return isAscending 
-        ? firstNameA.localeCompare(firstNameB) 
+
+      return isAscending
+        ? firstNameA.localeCompare(firstNameB)
         : firstNameB.localeCompare(firstNameA);
     },
   },
@@ -281,17 +391,17 @@ const columns = [
     // Sort by department first, then by name
     sortComparator: (a, b, field, isAscending) => {
       // First compare departments
-      const deptCompare = isAscending 
-        ? a.department.localeCompare(b.department) 
+      const deptCompare = isAscending
+        ? a.department.localeCompare(b.department)
         : b.department.localeCompare(a.department);
-      
+
       // If departments are the same, compare names
       if (deptCompare === 0) {
-        return isAscending 
-          ? a.name.localeCompare(b.name) 
+        return isAscending
+          ? a.name.localeCompare(b.name)
           : b.name.localeCompare(a.name);
       }
-      
+
       return deptCompare;
     },
     // Custom rendering to show both department and name
@@ -320,18 +430,18 @@ const columns = [
         if (age >= 65) return 2; // Senior
         return 1; // Adult
       };
-      
+
       const groupA = getAgeGroup(a.age);
       const groupB = getAgeGroup(b.age);
-      
+
       // First sort by age group
       if (groupA !== groupB) {
         return isAscending ? groupA - groupB : groupB - groupA;
       }
-      
+
       // Then sort alphabetically by name within each group
-      return isAscending 
-        ? a.name.localeCompare(b.name) 
+      return isAscending
+        ? a.name.localeCompare(b.name)
         : b.name.localeCompare(a.name);
     },
     renderCell: (_, row) => (

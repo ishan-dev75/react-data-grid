@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import EditableCellWrapper from '../EditableCellWrapper';
+import EditableCellWrapper from '@/modules/shared/dataGrid/cells/editable/EditableCellWrapper';
 
 interface StarRatingEditorProps {
   value: number;
