@@ -109,6 +109,12 @@ dataGridExtensions/
    - User double-clicks on a cell with `editable: true`
    - DataRow switches to edit mode for that cell
    - EditableCellRenderer selects the appropriate editable cell component
+   - If a custom editor is provided via `editableCell`, it's called with an object containing:
+     - `value`: The current cell value
+     - `row`: The entire row data
+     - `column`: The column definition
+     - `onSave`: Callback to save the edited value
+     - `onCancel`: Callback to cancel editing
    - User edits the value and presses Enter to save or Escape to cancel
    - On save, the new value is validated and passed to the parent component
 
@@ -134,8 +140,19 @@ We provide several powerful customization mechanisms:
 - `renderCell`: For custom cell UI rendering
 - `sortComparator`: For custom sorting logic
 - `editable`: For enabling in-place editing of cells
-- `editableCell`: For custom cell editing UI
+- `editableCell`: For custom cell editing UI with object parameter pattern
 - `valueValidator`: For validating edited values
+
+The `editableCell` function uses an object parameter pattern for better maintainability:
+```jsx
+editableCell: ({ value, row, column, onSave, onCancel }) => (
+  <CustomEditor
+    value={value}
+    onSave={onSave}
+    onCancel={onCancel}
+  />
+)
+```
 
 These allow for complete flexibility while maintaining a clean API.
 
@@ -163,11 +180,24 @@ const columns = [
   { field: 'id', headerName: 'ID', type: 'number' },
   { field: 'name', headerName: 'Name', type: 'string', editable: true },
   { field: 'birthDate', headerName: 'Birth Date', type: 'date', editable: true },
+  {
+    field: 'rating',
+    headerName: 'Rating',
+    editable: true,
+    // Custom editor using object parameter pattern
+    editableCell: ({ value, onSave, onCancel }) => (
+      <CustomRatingEditor
+        value={value}
+        onSave={onSave}
+        onCancel={onCancel}
+      />
+    )
+  },
 ];
 
 const rows = [
-  { id: 1, name: 'John Doe', birthDate: '1990-01-15' },
-  { id: 2, name: 'Jane Smith', birthDate: '1985-06-20' },
+  { id: 1, name: 'John Doe', birthDate: '1990-01-15', rating: 4 },
+  { id: 2, name: 'Jane Smith', birthDate: '1985-06-20', rating: 5 },
 ];
 
 function MyComponent() {

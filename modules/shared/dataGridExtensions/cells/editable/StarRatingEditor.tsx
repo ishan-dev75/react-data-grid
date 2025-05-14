@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import EditableCellWrapper from '@/modules/shared/dataGrid/cells/editable/EditableCellWrapper';
 
 interface StarRatingEditorProps {
-  value: number;
-  onSave: (value: number) => void;
-  onCancel: () => void;
-  maxRating?: number;
+  config: {
+    value: number;
+    maxRating?: number;
+    onSave: (value: number) => void;
+    onCancel: () => void;
+  }
 }
 
 /**
@@ -13,11 +15,14 @@ interface StarRatingEditorProps {
  * A custom editor for rating values using stars
  */
 const StarRatingEditor: React.FC<StarRatingEditorProps> = ({
-  value = 0,
-  onSave,
-  onCancel,
-  maxRating = 5
+  config
 }) => {
+  const {
+    value = 0,
+    onSave,
+    onCancel,
+    maxRating = 5
+  } = config;
   const [rating, setRating] = useState<number>(value || 0);
   const [hoverRating, setHoverRating] = useState<number | null>(null);
 

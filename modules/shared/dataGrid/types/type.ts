@@ -17,16 +17,22 @@ export type CellRenderer = (value: any, row: Row, column: ColumnRef) => React.Re
 export type SortComparator = (a: Row, b: Row, field: string, isAscending: boolean) => number;
 
 /**
+ * Parameters for the CellEditor function
+ */
+export interface CellEditorParams {
+  value: any;
+  row: Row;
+  column: ColumnRef;
+  onSave: (newValue: any) => void;
+  onCancel: () => void;
+}
+
+/**
  * Type for custom cell editor function
- * Receives the current value, the row data, the column definition, and a callback to save the edited value
+ * Receives an object with the current value, row data, column definition, and callbacks
  * Returns a React component for editing the cell value
  */
-export type CellEditor = (
-  value: any,
-  row: Row,
-  column: ColumnRef,
-  onSave: (newValue: any) => void
-) => React.ReactNode;
+export type CellEditor = (params: CellEditorParams) => React.ReactNode;
 
 /**
  * Type for value validator function
@@ -98,10 +104,11 @@ export interface ColumnRef {
    *
    * Example usage:
    * ```
-   * editableCell: (value, row, column, onSave) => (
+   * editableCell: ({ value, row, column, onSave, onCancel }) => (
    *   <CustomEditor
    *     initialValue={value}
    *     onSave={onSave}
+   *     onCancel={onCancel}
    *   />
    * )
    * ```

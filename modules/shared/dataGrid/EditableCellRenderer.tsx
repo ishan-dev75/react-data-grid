@@ -48,7 +48,13 @@ const EditableCellRenderer: React.FC<EditableCellRendererProps> = ({
 
   // If a custom editor is provided, use it
   if (column.editableCell) {
-    return <>{column.editableCell(value, row, column, (newValue) => handleSave(newValue))}</>;
+    return <>{column.editableCell({
+      value,
+      row,
+      column,
+      onSave: (newValue) => handleSave(newValue),
+      onCancel
+    })}</>;
   }
 
   // Common props for all editable cells

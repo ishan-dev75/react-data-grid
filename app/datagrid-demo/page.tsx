@@ -191,12 +191,14 @@ export default function DataGridDemo() {
         <StarRatingCell value={value || 0} maxRating={5} />
       ),
       // Custom cell editor using the editableCell prop
-      editableCell: (value, _row, _column, onSave) => (
+      editableCell: ({ value, onSave, onCancel }) => (
         <StarRatingEditor
-          value={value || 0}
-          maxRating={5}
-          onSave={onSave}
-          onCancel={() => {}} // We don't need to do anything on cancel
+          config={{
+            value: value || 0,
+            maxRating: 5,
+            onSave: onSave,
+            onCancel: onCancel // Pass the onCancel function from the DataGrid
+          }}
         />
       ),
       // Validate that the rating is between 0 and 5
