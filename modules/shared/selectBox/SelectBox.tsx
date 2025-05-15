@@ -1,23 +1,64 @@
 import React, { useRef, useEffect } from 'react';
 import Select, { type Props as SelectProps, components } from 'react-select';
 
-// Define our option type
+/**
+ * Option type for SelectBox
+ *
+ * @template T - The type of the data property
+ */
 type OptionType<T> = {
+    /**
+     * Unique identifier for the option
+     */
     value: string | number;
+
+    /**
+     * Display text for the option
+     */
     label: string;
+
+    /**
+     * Optional data associated with the option
+     * This can be used to store additional information about the option
+     */
     data?: T;
 };
 
 // Define our custom props
 type CustomProps = {
+    /**
+     * Whether to show checkboxes next to options in the dropdown.
+     * When true, displays a checkbox next to each option to indicate selection status.
+     * @default true
+     */
     showCheckbox?: boolean;
+
+    /**
+     * Whether to hide the selected value chips in the input box.
+     * When true, selected values won't appear as chips in the input area.
+     * Instead, a count of selected items will be shown.
+     * @default false
+     */
     hideValueChips?: boolean;
 };
 
 // Combine the standard SelectProps with our custom props
 interface SelectBoxProps<T> extends Omit<SelectProps<OptionType<T>>, 'options'>, CustomProps {
+    /**
+     * Array of options to display in the dropdown.
+     * Each option should have a value, label, and optional data property.
+     */
     options: OptionType<T>[];
+
+    /**
+     * Event handler for keydown events on the select container.
+     */
     onKeyDown?: (e: React.KeyboardEvent) => void;
+
+    /**
+     * Placeholder text to display when no option is selected.
+     * @default "Select"
+     */
     placeholder?: string;
 }
 
@@ -52,9 +93,12 @@ const CustomMultiValue = (props: any) => {
     // Access custom props via any type assertion
     const selectProps = props.selectProps as any;
     const hideValueChips = selectProps && selectProps.hideValueChips === true;
+    const isMulti = selectProps && selectProps.isMulti === true;
 
-    if (hideValueChips) {
-        return null; // Don't render anything for the selected values
+    // For single select with hideValueChips, we still want to show the selected value
+    // For multi-select with hideValueChips, we don't show any chips
+    if (hideValueChips && isMulti) {
+        return null; // Don't render anything for multi-select when chips are hidden
     }
 
     return <components.MultiValue {...props} />;
@@ -64,6 +108,7 @@ const CustomMultiValue = (props: any) => {
 const CustomValueContainer = (props: any) => {
     const { children, selectProps } = props;
     const hideValueChips = selectProps && selectProps.hideValueChips === true;
+    const isMulti = selectProps && selectProps.isMulti === true;
 
     // Safely get the selected values
     let selectedCount = 0;
@@ -77,7 +122,8 @@ const CustomValueContainer = (props: any) => {
         console.error('Error getting selected values:', error);
     }
 
-    const showCount = hideValueChips && selectedCount > 0;
+    // Only show count for multi-select with more than 1 item or if explicitly set to show for single items
+    const showCount = hideValueChips && selectedCount > 0 && (isMulti || selectedCount > 1);
 
     return (
         <components.ValueContainer {...props}>
@@ -97,11 +143,29 @@ const CustomValueContainer = (props: any) => {
     );
 };
 
+/**
+ * SelectBox component
+ *
+ * A customizable dropdown select component based on react-select with additional features:
+ * - Checkbox selection mode for multi-select
+ * - Option to hide selected value chips in the input area
+ * - Dark mode support
+ * - Customizable styling
+ *
+ * @template T - The type of the data property in options
+ * @param props - Component props
+ * @returns React component
+ */
 function SelectBox<T>(props: SelectBoxProps<T>) {
     const {
         options,
         placeholder = 'Select',
         onKeyDown,
+        /**
+         * Whether to hide options in the dropdown after they've been selected.
+         * When false (default), selected options remain visible in the dropdown.
+         * @default false
+         */
         hideSelectedOptions = false,
         showCheckbox = true,
         hideValueChips = false,
@@ -224,7 +288,8 @@ function SelectBox<T>(props: SelectBoxProps<T>) {
         styles: customStyles,
         components: customComponents,
         hideSelectedOptions,
-        closeMenuOnSelect: false,
+        // Close menu on select for single select, keep open for multi-select
+        closeMenuOnSelect: !(restProps.isMulti === true),
         ...restProps
     };
 
