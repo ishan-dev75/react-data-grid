@@ -569,13 +569,12 @@ export default function TaskManagementDemo() {
       <div className="mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4 dark:text-white">Task Management</h1>
         <p className="mb-4 text-gray-600 dark:text-gray-400">Track and manage project tasks with assignees, status, and priorities.</p>
-        <div className='h-[calc(100vh-14rem)] overflow-auto'>
-          <DataGrid
-            columns={columns}
-            rows={tasks}
-            onCellValueChange={handleCellValueChange}
-          />
-        </div>
+        <DataGrid
+          columns={columns}
+          rows={tasks}
+          onCellValueChange={handleCellValueChange}
+          height="calc(100vh - 14rem)"
+        />
       </div>
     </>
   );

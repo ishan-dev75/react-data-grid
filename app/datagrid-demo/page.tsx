@@ -252,13 +252,12 @@ export default function DataGridDemo() {
       <div className="mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4 dark:text-white">DataGrid Demo with Editable Cells</h1>
         <p className="mb-4 text-gray-600 dark:text-gray-400">Double-click on a cell to edit its value. Press Enter to save or Escape to cancel.</p>
-        <div className='h-[calc(100vh-14rem)] overflow-auto'>
-          <DataGrid
-            columns={columns}
-            rows={demoRows}
-            onCellValueChange={handleCellValueChange}
-          />
-        </div>
+        <DataGrid
+          columns={columns}
+          rows={demoRows}
+          onCellValueChange={handleCellValueChange}
+          height="calc(100vh - 14rem)"
+        />
       </div>
     </>
   );

@@ -63,7 +63,7 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
 
   return (
     <th
-      className={`px-4 py-2 font-medium text-gray-700 dark:text-gray-300 border-b ${column.sortable !== false ? 'cursor-pointer select-none' : ''}`}
+      className={`px-4 py-3 font-medium text-gray-700 dark:text-gray-300 border-b bg-gray-100 dark:bg-gray-800 ${column.sortable !== false ? 'cursor-pointer select-none' : ''}`}
       style={{
         minWidth: column.minWidth || 200,
         width: column.width || 'auto'

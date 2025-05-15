@@ -161,6 +161,7 @@ These allow for complete flexibility while maintaining a clean API.
 - React.memo for cell and row components to prevent unnecessary re-renders
 - Efficient sorting with memoization
 - Centralized value retrieval logic
+- Sticky header for better usability with large datasets
 
 ### 5. TypeScript Integration
 
@@ -211,6 +212,7 @@ function MyComponent() {
       columns={columns}
       rows={rows}
       onCellValueChange={handleCellValueChange}
+      height="500px" // Set a fixed height to enable scrolling with sticky header
     />
   );
 }

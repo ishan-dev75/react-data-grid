@@ -24,6 +24,8 @@ This document provides comprehensive examples of how to use the DataGrid compone
   - [Default Sorting](#default-sorting)
   - [Custom Sorting](#custom-sorting)
   - [Multi-Criteria Sorting](#multi-criteria-sorting)
+- [Layout and Styling](#layout-and-styling)
+  - [Fixed Height with Sticky Header](#fixed-height-with-sticky-header)
 
 ## Basic Usage
 
@@ -457,3 +459,57 @@ const columns = [
 ```
 
 This example demonstrates how to implement complex sorting logic that first groups records by one criterion (age group) and then sorts them by another criterion (name) within each group.
+
+## Layout and Styling
+
+### Fixed Height with Sticky Header
+
+The DataGrid component supports a fixed height with a sticky header, which is useful for displaying large datasets without taking up too much screen space. The header remains visible at the top of the table even when scrolling through the data.
+
+```jsx
+import React from 'react';
+import { DataGrid } from '@/modules/shared/dataGrid';
+
+const columns = [
+  { field: 'id', headerName: 'ID', type: 'number' },
+  { field: 'name', headerName: 'Name' },
+  { field: 'email', headerName: 'Email' },
+  { field: 'role', headerName: 'Role' },
+  // Add more columns as needed
+];
+
+// Generate a large dataset
+const rows = Array.from({ length: 100 }, (_, i) => ({
+  id: i + 1,
+  name: `User ${i + 1}`,
+  email: `user${i + 1}@example.com`,
+  role: i % 3 === 0 ? 'Admin' : i % 3 === 1 ? 'Editor' : 'Viewer',
+}));
+
+export default function LargeDatasetExample() {
+  return (
+    <div className="container mx-auto p-4">
+      <h1 className="text-xl font-bold mb-4">Users</h1>
+
+      {/* The height prop enables the sticky header and scrolling */}
+      <DataGrid
+        columns={columns}
+        rows={rows}
+        height="500px" // Set a fixed height to enable scrolling with sticky header
+      />
+    </div>
+  );
+}
+```
+
+You can also use viewport-relative units or calc() expressions for responsive heights:
+
+```jsx
+<DataGrid
+  columns={columns}
+  rows={rows}
+  height="calc(100vh - 200px)" // Responsive height based on viewport
+/>
+```
+
+The sticky header ensures that column headers remain visible at the top of the table even when scrolling through a large dataset, improving usability and context awareness.

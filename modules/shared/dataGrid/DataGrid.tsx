@@ -5,9 +5,27 @@ import HeaderCell from './HeaderCell';
 import { sortRows } from './utils/sortUtils';
 
 interface DataGridProps {
+  /**
+   * Array of column definitions
+   */
   columns: ColumnRef[];
+
+  /**
+   * Array of data rows
+   */
   rows: Row[];
+
+  /**
+   * Callback function when a cell value changes
+   */
   onCellValueChange?: (rowId: any, field: string, value: any) => void;
+
+  /**
+   * Height of the grid container
+   * Can be a CSS value like '400px' or a Tailwind class like 'h-96'
+   * If not provided, the grid will take the height of its container
+   */
+  height?: string;
 }
 
 /**
@@ -17,7 +35,8 @@ interface DataGridProps {
 const DataGrid: React.FC<DataGridProps> = ({
   columns,
   rows,
-  onCellValueChange
+  onCellValueChange,
+  height
 }) => {
   const [sortModel, setSortModel] = useState<SortModel | null>(null);
   const [internalRows, setInternalRows] = useState<Row[]>(rows);
@@ -73,11 +92,18 @@ const DataGrid: React.FC<DataGridProps> = ({
     }
   }, [onCellValueChange]);
 
+  // Determine container style based on height prop
+  const containerStyle: React.CSSProperties = {
+    height: height || 'auto',
+    maxHeight: height ? undefined : '100%',
+    overflow: 'auto'
+  };
+
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full overflow-x-auto relative" style={containerStyle}>
       <table className="min-w-full border-collapse">
-        <thead>
-          <tr className="bg-gray-100 dark:bg-gray-800">
+        <thead className="sticky top-0 z-10">
+          <tr className="bg-gray-100 dark:bg-gray-800 shadow-sm">
             {columns.map((column) => (
               <HeaderCell
                 key={column.field}
