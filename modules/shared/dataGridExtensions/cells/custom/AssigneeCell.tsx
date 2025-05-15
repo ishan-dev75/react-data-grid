@@ -1,11 +1,6 @@
-import React from 'react';
+import { User } from '@/modules/shared/data/type';
 import { Tooltip } from '@/modules/shared/tooltip';
-
-export interface User {
-  id: string | number;
-  name: string;
-  imgURL?: string;
-}
+import React from 'react';
 
 interface AssigneeCellProps {
   users: User[];
@@ -83,7 +78,7 @@ const AssigneeCell: React.FC<AssigneeCellProps> = ({
             <span>{initials}</span>
           )}
         </div>
-        <span className="text-sm font-medium text-white">{user.name}</span>
+        <span className="text-sm font-medium text-black dark:text-white">{user.name}</span>
       </div>
     );
   };

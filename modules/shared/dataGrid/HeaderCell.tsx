@@ -50,11 +50,13 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
 
     return (
       <Tooltip content={tooltipText}>
-        <span className="ml-1 inline-flex items-center">
+        <span
+          className={`ml-1 inline-flex items-center ${sortDirection ? 'text-blue-500' : 'text-gray-400'}`}
+        >
           <Icon
             name={iconName}
             size={16}
-            className={sortDirection ? 'text-blue-500' : 'text-gray-400'}
+
           />
         </span>
       </Tooltip>
@@ -71,7 +73,21 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
       onClick={() => column.sortable !== false && onSort(column)}
     >
       <div className={`flex items-center ${getAlignmentClass()}`}>
-        <span>{column.headerName}</span>
+        <div className="flex items-center">
+          {column.editable && (
+            <Tooltip content="Double-click on cells in this column to edit values">
+              <span className="mr-1 ">
+                <Icon name="pencil" size={14} />
+              </span>
+            </Tooltip>
+          )}
+          <span>{column.headerName}</span>
+          {/* {column.editable && (
+            <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+              Editable
+            </span>
+          )} */}
+        </div>
         {getSortIcon()}
       </div>
     </th>

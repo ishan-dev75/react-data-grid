@@ -235,6 +235,10 @@ function SelectBox<T>(props: SelectBoxProps<T>) {
                 borderColor: themeValues.selectBorderHover,
             },
         }),
+        input: (base: any) => ({
+            ...base,
+            color: themeValues.selectText,
+        }),
         menu: (base: any) => ({
             ...base,
             backgroundColor: themeValues.selectBackground,

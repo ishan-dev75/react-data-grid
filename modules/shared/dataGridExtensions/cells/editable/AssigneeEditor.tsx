@@ -1,32 +1,71 @@
 import React, { useState } from 'react';
-import Select, { MultiValue } from 'react-select';
 import EditableCellWrapper from '@/modules/shared/dataGrid/cells/editable/EditableCellWrapper';
-import { User } from '../custom/AssigneeCell';
 import SelectBox from '@/modules/shared/selectBox/SelectBox';
+import { User } from '@/modules/shared/data/type';
 
+/**
+ * Option format for the SelectBox component
+ */
 interface AssigneeOption {
+  /**
+   * Unique identifier for the option
+   */
   value: string | number;
+
+  /**
+   * Display text for the option
+   */
   label: string;
+
+  /**
+   * The full user data associated with this option
+   */
   data: User;
 }
 
 interface AssigneeEditorProps {
-    value: User[];
-    availableUsers: User[];
-    onSave: (value: User[]) => void;
-    onCancel: () => void;
+  /**
+   * Currently selected users
+   */
+  value: User[];
+
+  /**
+   * List of all available users to select from
+   */
+  availableUsers: User[];
+
+  /**
+   * Callback when selection is saved
+   * Always returns an array of users, even in single-select mode
+   */
+  onSave: (value: User[]) => void;
+
+  /**
+   * Callback when editing is cancelled
+   */
+  onCancel: () => void;
+
+  /**
+   * Whether to allow only a single selection
+   * When true, only one user can be selected
+   * When false, multiple users can be selected
+   * @default false
+   */
+  singleSelect?: boolean;
 }
 
 /**
  * AssigneeEditor component
- * A custom editor for selecting multiple assignees from a dropdown
+ * A custom editor for selecting assignees from a dropdown
+ * Supports both single-select and multi-select modes via the singleSelect prop
  */
 const AssigneeEditor: React.FC<AssigneeEditorProps> = (props) => {
   const {
     value = [],
     availableUsers = [],
     onSave,
-    onCancel
+    onCancel,
+    singleSelect = false
   } = props;
 
   // Convert users to options format for react-select
@@ -38,24 +77,41 @@ const AssigneeEditor: React.FC<AssigneeEditorProps> = (props) => {
 
   // Get the initially selected options
   const getInitialSelectedOptions = () => {
-    return value.map(user => ({
+    const mappedOptions = value.map(user => ({
       value: user.id,
       label: user.name,
       data: user
     }));
+
+    // For single-select mode, return the first option if available
+    if (singleSelect && mappedOptions.length > 0) {
+      return mappedOptions[0];
+    }
+
+    // For multi-select mode or empty selection, return the array
+    return mappedOptions;
   };
 
-  const [selectedOptions, setSelectedOptions] = useState<AssigneeOption[]>(getInitialSelectedOptions());
+  const [selectedOptions, setSelectedOptions] = useState<AssigneeOption[] | AssigneeOption>(getInitialSelectedOptions());
 
   // Handle selection change
-  const handleChange = (newValue: any[]) => {
-    setSelectedOptions(newValue as AssigneeOption[]);
+  const handleChange = (newValue: any) => {
+    // In single-select mode, newValue will be a single object
+    // In multi-select mode, newValue will be an array of objects
+    setSelectedOptions(newValue);
   };
 
   // Handle save
   const handleSave = () => {
-    const selectedUsers = selectedOptions.map(option => option.data);
-    onSave(selectedUsers);
+    if (singleSelect) {
+      // For single-select, selectedOptions is a single AssigneeOption object
+      const selectedUser = selectedOptions as AssigneeOption;
+      onSave(selectedUser ? [selectedUser.data] : []);
+    } else {
+      // For multi-select, selectedOptions is an array of AssigneeOption objects
+      const selectedUsers = (selectedOptions as AssigneeOption[])?.map(option => option.data) || [];
+      onSave(selectedUsers);
+    }
   };
 
   // Custom option renderer to show user avatar
@@ -76,7 +132,7 @@ const AssigneeEditor: React.FC<AssigneeEditorProps> = (props) => {
             <span>{initials}</span>
           )}
         </div>
-        <span>{user.name}</span>
+        <span className='text-black dark:text-white'>{user.name}</span>
       </div>
     );
   };
@@ -92,15 +148,15 @@ const AssigneeEditor: React.FC<AssigneeEditorProps> = (props) => {
   return (
     <EditableCellWrapper onSave={handleSave} onCancel={onCancel} className='!p-0'>
       <SelectBox
-        isMulti
+        isMulti={!singleSelect}
         options={userOptions}
         value={selectedOptions}
         onChange={(newValue: any) => handleChange(newValue)}
         formatOptionLabel={(data: any) => formatOptionLabel(data as AssigneeOption)}
         menuPlacement="auto"
-        showCheckbox={true}
-        hideValueChips={true}
-        hideSelectedOptions={false}
+        showCheckbox={!singleSelect}
+        hideValueChips={!singleSelect}
+        hideSelectedOptions={singleSelect}
         placeholder="Search users..."
       />
     </EditableCellWrapper>

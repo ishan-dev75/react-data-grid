@@ -1,11 +1,13 @@
 import React from 'react';
-import { 
-  TbSortAscending, 
-  TbSortDescending, 
-  TbArrowsSort 
+import {
+  TbSortAscending,
+  TbSortDescending,
+  TbArrowsSort,
+  TbEdit,
+  TbPencil
 } from 'react-icons/tb';
 
-export type IconName = 'sortAsc' | 'sortDesc' | 'sortDefault';
+export type IconName = 'sortAsc' | 'sortDesc' | 'sortDefault' | 'edit' | 'pencil';
 
 interface IconProps {
   name: IconName;
@@ -17,9 +19,9 @@ interface IconProps {
 /**
  * Common Icon component that centralizes all icon usage in the application
  */
-export const Icon: React.FC<IconProps> = ({ 
-  name, 
-  size = 18, 
+export const Icon: React.FC<IconProps> = ({
+  name,
+  size = 18,
   color = 'currentColor',
   className = ''
 }) => {
@@ -36,6 +38,10 @@ export const Icon: React.FC<IconProps> = ({
       return <TbSortDescending {...iconProps} />;
     case 'sortDefault':
       return <TbArrowsSort {...iconProps} />;
+    case 'edit':
+      return <TbEdit {...iconProps} />;
+    case 'pencil':
+      return <TbPencil {...iconProps} />;
     default:
       return null;
   }

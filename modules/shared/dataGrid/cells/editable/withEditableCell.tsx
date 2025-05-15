@@ -75,7 +75,7 @@ function withEditableCell<T>(
           onChange={handleChange}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
-          className={`w-full px-2 py-1 border ${error ? 'border-red-500' : 'border-blue-500'} rounded focus:outline-none focus:ring-2 focus:ring-blue-300 ${alignmentClass}`}
+          className={`w-full text-black px-2 py-1 border ${error ? 'border-red-500' : 'border-blue-500'} rounded focus:outline-none focus:ring-2 focus:ring-blue-300 ${alignmentClass}`}
           {...props}
         />
         {error && <div className="text-red-500 text-xs mt-1">Invalid value</div>}

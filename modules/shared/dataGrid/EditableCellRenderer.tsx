@@ -7,7 +7,6 @@ import {
   EditableDefaultCell
 } from './cells/editable';
 import { getCellValue } from './utils/sortUtils';
-import EditableCellWrapper from './cells/editable/EditableCellWrapper';
 
 interface EditableCellRendererProps {
   column: ColumnRef;

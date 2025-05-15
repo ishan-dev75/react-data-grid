@@ -1,0 +1,230 @@
+import { Task, User } from "./type";
+
+const userAssigneeMockData: User[] = [
+    { id: 1, name: 'Tony Stark', imgURL: 'https://randomuser.me/api/portraits/men/1.jpg' },
+    { id: 2, name: 'Steve Rogers', imgURL: 'https://randomuser.me/api/portraits/men/2.jpg' },
+    { id: 3, name: 'Bruce Banner', imgURL: 'https://randomuser.me/api/portraits/men/3.jpg' },
+    { id: 4, name: 'Natasha Romanoff', imgURL: 'https://randomuser.me/api/portraits/women/4.jpg' },
+    { id: 5, name: 'Clint Barton', imgURL: 'https://randomuser.me/api/portraits/men/5.jpg' },
+    { id: 6, name: 'Thor Odinson' }, // No image URL to test fallback to initials
+    { id: 7, name: 'Peter Parker', imgURL: 'https://randomuser.me/api/portraits/men/7.jpg' },
+    { id: 8, name: 'Wanda Maximoff', imgURL: 'https://randomuser.me/api/portraits/women/8.jpg' },
+];
+
+// Define initial rows data
+export const userMockData = [
+    // Random order of different ages and names with assignees
+    { id: 8, lastName: 'Wayne', firstName: 'Bruce', age: 31, birthDate: '1980-02-19', fullName: 'Bruce Wayne', rating: 5, assignee: [userAssigneeMockData[0]] },
+    { id: 3, lastName: 'Allen', firstName: 'Barry', age: 11, birthDate: '1995-01-20', fullName: 'Barry Allen', rating: 4, assignee: [userAssigneeMockData[3],] },
+    { id: 11, lastName: 'Clifford', firstName: 'Ferrara', age: 44, birthDate: '1978-04-19', fullName: 'Ferrara Clifford', rating: 3, assignee: [userAssigneeMockData[5]] },
+    { id: 5, lastName: 'Kent', firstName: 'Clark', age: 14, birthDate: '1990-06-18', fullName: 'Clark Kent', rating: 5, assignee: [userAssigneeMockData[0]] },
+    { id: 14, lastName: 'Targaryen', firstName: 'Daenerys', age: null, birthDate: '1992-05-12', fullName: 'Daenerys Targaryen', rating: 4, assignee: [] },
+    { id: 9, lastName: 'Frances', firstName: 'Rossini', age: 36, birthDate: '1986-07-12', fullName: 'Frances Rossini', rating: 2, assignee: [userAssigneeMockData[1]] },
+    { id: 7, lastName: 'Lannister', firstName: 'Jaime', age: 31, birthDate: '1980-06-23', fullName: 'Jaime Lannister', rating: 3, assignee: [userAssigneeMockData[7]] },
+    { id: 4, lastName: 'Snow', firstName: 'Jon', age: 14, birthDate: '1990-01-15', fullName: 'Jon Snow', rating: 4, assignee: [userAssigneeMockData[0]] },
+    { id: 15, lastName: 'Melisandre', firstName: null, age: 150, birthDate: '1870-01-01', fullName: 'Melisandre', rating: 5, assignee: [userAssigneeMockData[6]] },
+    { id: 2, lastName: 'Parker', firstName: 'Peter', age: 11, birthDate: '1995-05-15', fullName: 'Peter Parker', rating: 4, assignee: [userAssigneeMockData[0]] },
+    { id: 13, lastName: 'Roxie', firstName: 'Harvey', age: 65, birthDate: '1957-12-25', fullName: 'Roxie Harvey', rating: 1, assignee: [] },
+    { id: 10, lastName: 'Rogers', firstName: 'Steve', age: 36, birthDate: '1986-07-04', fullName: 'Steve Rogers', rating: 5, assignee: [userAssigneeMockData[2]] },
+    { id: 1, lastName: 'Stark', firstName: 'Arya', age: 11, birthDate: '1995-03-10', fullName: 'Arya Stark', rating: 4, assignee: [userAssigneeMockData[1]] },
+    { id: 12, lastName: 'Stark', firstName: 'Tony', age: 44, birthDate: '1978-05-29', fullName: 'Tony Stark', rating: 5, assignee: [userAssigneeMockData[3]] },
+    { id: 6, lastName: 'Lannister', firstName: 'Cersei', age: 31, birthDate: '1980-06-23', fullName: 'Cersei Lannister', rating: 2, assignee: [userAssigneeMockData[0]] },
+];
+
+
+const taskUsersAssignee: User[] = [
+    { id: 1, name: 'Alex Johnson', imgURL: 'https://randomuser.me/api/portraits/men/32.jpg' },
+    { id: 2, name: 'Sarah Miller', imgURL: 'https://randomuser.me/api/portraits/women/44.jpg' },
+    { id: 3, name: 'David Chen', imgURL: 'https://randomuser.me/api/portraits/men/59.jpg' },
+    { id: 4, name: 'Emily Wilson', imgURL: 'https://randomuser.me/api/portraits/women/17.jpg' },
+    { id: 5, name: 'Michael Brown', imgURL: 'https://randomuser.me/api/portraits/men/81.jpg' },
+    { id: 6, name: 'Jessica Lee' }, // No image URL to test fallback to initials
+    { id: 7, name: 'Robert Taylor', imgURL: 'https://randomuser.me/api/portraits/men/22.jpg' },
+    { id: 8, name: 'Lisa Garcia', imgURL: 'https://randomuser.me/api/portraits/women/28.jpg' },
+];
+
+
+
+// Define initial tasks data
+export const initialMockTasks: Task[] = [
+    {
+        id: 1,
+        title: 'Implement user authentication',
+        description: 'Add login, registration, and password reset functionality',
+        status: 'In Progress',
+        priority: 'High',
+        dueDate: '2023-12-15',
+        assignee: [taskUsersAssignee[0], taskUsersAssignee[2]],
+        tags: ['Frontend', 'Security'],
+        createdAt: '2023-11-20T09:00:00Z',
+        updatedAt: '2023-11-25T14:30:00Z',
+        progress: 60,
+        storyPoints: 8,
+        documentationLink: 'https://example.com/docs/auth'
+    },
+    {
+        id: 2,
+        title: 'Design database schema',
+        description: 'Create ERD and define relationships between entities',
+        status: 'Done',
+        priority: 'High',
+        dueDate: '2023-11-10',
+        assignee: [taskUsersAssignee[1]],
+        tags: ['Database', 'Architecture'],
+        createdAt: '2023-11-01T10:15:00Z',
+        updatedAt: '2023-11-10T16:45:00Z',
+        progress: 100,
+        storyPoints: 5,
+        documentationLink: 'https://example.com/docs/database-schema'
+    },
+    {
+        id: 3,
+        title: 'Optimize API response time',
+        description: 'Improve performance of slow endpoints',
+        status: 'To Do',
+        priority: 'Medium',
+        dueDate: '2023-12-20',
+        assignee: [taskUsersAssignee[3], taskUsersAssignee[4], taskUsersAssignee[5]],
+        tags: ['Backend', 'Performance'],
+        createdAt: '2023-11-22T11:30:00Z',
+        updatedAt: '2023-11-22T11:30:00Z',
+        progress: 0,
+        storyPoints: 3,
+        documentationLink: 'https://example.com/docs/api-optimization'
+    },
+    {
+        id: 4,
+        title: 'Fix navigation bug on mobile',
+        description: 'Menu doesn\'t close after selection on small screens',
+        status: 'Blocked',
+        priority: 'Critical',
+        dueDate: '2023-11-30',
+        assignee: [taskUsersAssignee[0]],
+        tags: ['Frontend', 'Bug', 'Mobile'],
+        createdAt: '2023-11-15T13:45:00Z',
+        updatedAt: '2023-11-28T09:20:00Z',
+        progress: 25,
+        storyPoints: 2,
+        documentationLink: 'https://example.com/docs/mobile-nav-bug'
+    },
+    {
+        id: 5,
+        title: 'Create user dashboard',
+        description: 'Design and implement main user dashboard with analytics',
+        status: 'In Progress',
+        priority: 'Medium',
+        dueDate: '2023-12-05',
+        assignee: [taskUsersAssignee[2], taskUsersAssignee[7]],
+        tags: ['Frontend', 'UI/UX'],
+        createdAt: '2023-11-10T09:30:00Z',
+        updatedAt: '2023-11-27T11:15:00Z',
+        progress: 75,
+        storyPoints: 13,
+        documentationLink: 'https://example.com/docs/user-dashboard'
+    },
+    {
+        id: 6,
+        title: 'Write API documentation',
+        description: 'Document all endpoints using Swagger',
+        status: 'To Do',
+        priority: 'Low',
+        dueDate: '2023-12-30',
+        assignee: [taskUsersAssignee[6]],
+        tags: ['Documentation', 'API'],
+        createdAt: '2023-11-25T15:00:00Z',
+        updatedAt: '2023-11-25T15:00:00Z',
+        progress: 0,
+        storyPoints: 3,
+        documentationLink: 'https://example.com/docs/api-docs'
+    },
+    {
+        id: 7,
+        title: 'Implement file upload feature',
+        description: 'Add ability to upload and manage files',
+        status: 'In Progress',
+        priority: 'High',
+        dueDate: '2023-12-10',
+        assignee: [taskUsersAssignee[1], taskUsersAssignee[3]],
+        tags: ['Backend', 'Feature'],
+        createdAt: '2023-11-18T10:00:00Z',
+        updatedAt: '2023-11-26T14:20:00Z',
+        progress: 40,
+        storyPoints: 8,
+        documentationLink: 'https://example.com/docs/file-upload'
+    },
+    {
+        id: 8,
+        title: 'Set up CI/CD pipeline',
+        description: 'Configure automated testing and deployment',
+        status: 'Done',
+        priority: 'High',
+        dueDate: '2023-11-15',
+        assignee: [taskUsersAssignee[4], taskUsersAssignee[5]],
+        tags: ['DevOps', 'Automation'],
+        createdAt: '2023-11-05T09:15:00Z',
+        updatedAt: '2023-11-15T10:30:00Z',
+        progress: 100,
+        storyPoints: 5,
+        documentationLink: 'https://example.com/docs/cicd'
+    },
+    {
+        id: 9,
+        title: 'Refactor authentication service',
+        description: 'Improve code quality and add unit tests',
+        status: 'To Do',
+        priority: 'Medium',
+        dueDate: '2023-12-25',
+        assignee: [taskUsersAssignee[0], taskUsersAssignee[2], taskUsersAssignee[6]],
+        tags: ['Backend', 'Refactoring', 'Testing'],
+        createdAt: '2023-11-24T13:30:00Z',
+        updatedAt: '2023-11-24T13:30:00Z',
+        progress: 0,
+        storyPoints: 5,
+        documentationLink: 'https://example.com/docs/auth-refactor'
+    },
+    {
+        id: 10,
+        title: 'Update dependencies',
+        description: 'Update all packages to latest versions',
+        status: 'Done',
+        priority: 'Low',
+        dueDate: '2023-11-20',
+        assignee: [taskUsersAssignee[7]],
+        tags: ['Maintenance'],
+        createdAt: '2023-11-15T11:00:00Z',
+        updatedAt: '2023-11-20T09:45:00Z',
+        progress: 100,
+        storyPoints: 2,
+        documentationLink: 'https://example.com/docs/dependencies'
+    },
+    {
+        id: 11,
+        title: 'Create onboarding tutorial',
+        description: 'Design and implement interactive onboarding for new taskUsersAssignee',
+        status: 'In Progress',
+        priority: 'Medium',
+        dueDate: '2023-12-15',
+        assignee: [taskUsersAssignee[1], taskUsersAssignee[7]],
+        tags: ['Frontend', 'UX'],
+        createdAt: '2023-11-20T14:15:00Z',
+        updatedAt: '2023-11-28T10:30:00Z',
+        progress: 50,
+        storyPoints: 8,
+        documentationLink: 'https://example.com/docs/onboarding'
+    },
+    {
+        id: 12,
+        title: 'Implement dark mode',
+        description: 'Add dark theme support across the application',
+        status: 'To Do',
+        priority: 'Low',
+        dueDate: '2023-12-30',
+        assignee: [],
+        tags: ['Frontend', 'UI'],
+        createdAt: '2023-11-27T09:00:00Z',
+        updatedAt: '2023-11-27T09:00:00Z',
+        progress: 0,
+        storyPoints: 5,
+        documentationLink: 'https://example.com/docs/dark-mode'
+    },
+];
