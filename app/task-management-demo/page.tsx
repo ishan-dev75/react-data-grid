@@ -431,13 +431,13 @@ export default function TaskManagementDemo() {
         );
       },
       // Use our custom date cell for editing
-      editableCell: ({ value, onSave, onCancel }) => (
-        <CustomDateCell
-          value={value}
-          onSave={onSave}
-          onCancel={onCancel}
-        />
-      )
+      // editableCell: ({ value, onSave, onCancel }) => (
+      //   <CustomDateCell
+      //     value={value}
+      //     onSave={onSave}
+      //     onCancel={onCancel}
+      //   />
+      // )
     },
     {
       field: 'assignee',
@@ -450,12 +450,10 @@ export default function TaskManagementDemo() {
       // Custom editor for selecting assignees
       editableCell: ({ value, onSave, onCancel }) => (
         <AssigneeEditor
-          config={{
-            value: value || [],
-            availableUsers: users, // Pass all available users
-            onSave: onSave,
-            onCancel: onCancel
-          }}
+          value={value || []}
+          availableUsers={users}
+          onSave={onSave}
+          onCancel={onCancel}
         />
       ),
       sortComparator: (a: Row, b: Row, _field: string, isAscending: boolean) => {
@@ -568,7 +566,7 @@ export default function TaskManagementDemo() {
   return (
     <>
       <DemoNavigation />
-      <div className="container mx-auto p-4">
+      <div className="mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4 dark:text-white">Task Management</h1>
         <p className="mb-4 text-gray-600 dark:text-gray-400">Track and manage project tasks with assignees, status, and priorities.</p>
         <div className='h-[calc(100vh-14rem)] overflow-auto'>

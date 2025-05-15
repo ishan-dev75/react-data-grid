@@ -22,7 +22,7 @@ const EditableCellWrapper: React.FC<EditableCellWrapperProps> = ({
   className = '',
   autoFocus = true,
   saveOnBlur = true,
-  style = {}
+  style = {}  
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -68,7 +68,7 @@ const EditableCellWrapper: React.FC<EditableCellWrapperProps> = ({
   return (
     <div
       ref={wrapperRef}
-      className={`px-4 py-2 border-2 border-blue-500 rounded bg-blue-50 dark:bg-blue-900/20 focus:outline-none focus:ring-2 focus:ring-blue-300 ${className}`}
+      className={`my-2 px-2 py-2 border-2 border-blue-500 rounded bg-blue-50 dark:bg-blue-900/20 focus:outline-none focus:ring-2 focus:ring-blue-300 ${className}`}
       style={style}
       tabIndex={0}
       onKeyDown={handleKeyDown}

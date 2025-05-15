@@ -203,14 +203,14 @@ export default function DataGridDemo() {
       align: 'right',
       editable: true, // Make this column editable
       // Use our custom date cell for editing
-      editableCell: ({ value, onSave, onCancel }) => (
-        <CustomDateCell
-          value={value}
-          onSave={onSave}
-          onCancel={onCancel}
-          align="right"
-        />
-      ),
+      // editableCell: ({ value, onSave, onCancel }) => (
+      //   <CustomDateCell
+      //     value={value}
+      //     onSave={onSave}
+      //     onCancel={onCancel}
+      //     align="right"
+      //   />
+      // ),
       // Validate that the date is not in the future
       valueValidator: (value) => {
         if (!value) return true;
@@ -249,7 +249,7 @@ export default function DataGridDemo() {
   return (
     <>
       <DemoNavigation />
-      <div className="container mx-auto p-4">
+      <div className="mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4 dark:text-white">DataGrid Demo with Editable Cells</h1>
         <p className="mb-4 text-gray-600 dark:text-gray-400">Double-click on a cell to edit its value. Press Enter to save or Escape to cancel.</p>
         <div className='h-[calc(100vh-14rem)] overflow-auto'>

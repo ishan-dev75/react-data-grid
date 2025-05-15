@@ -48,7 +48,12 @@ const StarRatingEditor: React.FC<StarRatingEditorProps> = ({
   };
 
   return (
-    <div className='flex items-center flex-col'>
+    <EditableCellWrapper
+      onSave={handleSave}
+      onCancel={onCancel}
+      className="flex flex-col items-center justify-center"
+      saveOnBlur={false} // Don't save on blur since we save on click
+    >
       <div className="flex items-center mb-1">
         {Array.from({ length: maxRating }).map((_, index) => {
           const starValue = index + 1;
@@ -71,7 +76,7 @@ const StarRatingEditor: React.FC<StarRatingEditorProps> = ({
       <div className="text-xs text-blue-600 dark:text-blue-400">
         Click to rate
       </div>
-    </div>
+    </EditableCellWrapper>
   );
 };
 

@@ -13,7 +13,7 @@ const DemoNavigation: React.FC = () => {
 
   return (
     <div className="bg-white dark:bg-gray-800 shadow-sm mb-6">
-      <div className="container mx-auto px-4">
+      <div className="mx-auto px-4">
         <div className="flex space-x-4 py-3">
           <Link
             href="/task-management-demo"
