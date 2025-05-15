@@ -7,6 +7,7 @@ import {
   EditableDefaultCell
 } from './cells/editable';
 import { getCellValue } from './utils/sortUtils';
+import EditableCellWrapper from './cells/editable/EditableCellWrapper';
 
 interface EditableCellRendererProps {
   column: ColumnRef;
@@ -48,13 +49,18 @@ const EditableCellRenderer: React.FC<EditableCellRendererProps> = ({
 
   // If a custom editor is provided, use it
   if (column.editableCell) {
-    return <>{column.editableCell({
-      value,
-      row,
-      column,
-      onSave: (newValue) => handleSave(newValue),
-      onCancel
-    })}</>;
+    return (
+      <EditableCellWrapper onSave={() => handleSave(value)} onCancel={onCancel} className="flex flex-col items-center justify-center"
+        saveOnBlur={false}>
+        {column.editableCell({
+          value,
+          row,
+          column,
+          onSave: (newValue) => handleSave(newValue),
+          onCancel
+        })}
+      </EditableCellWrapper>
+    );
   }
 
   // Common props for all editable cells

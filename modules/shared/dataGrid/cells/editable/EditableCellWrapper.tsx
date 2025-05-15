@@ -38,9 +38,12 @@ const EditableCellWrapper: React.FC<EditableCellWrapperProps> = ({
   };
 
   // Handle blur event
-  const handleBlur = () => {
-    if (saveOnBlur) {
-      onSave();
+  const handleBlur = (e: React.FocusEvent) => {
+    if (!wrapperRef.current?.contains(e.relatedTarget as Node)) {
+      if (saveOnBlur) {
+        onSave();
+      }
+      onCancel();
     }
   };
 

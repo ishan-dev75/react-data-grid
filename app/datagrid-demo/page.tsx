@@ -218,30 +218,30 @@ export default function DataGridDemo() {
         return !isNaN(date.getTime()) && date <= new Date();
       }
     },
-    // {
-    //   field: 'rating',
-    //   headerName: 'Rating',
-    //   align: 'center',
-    //   minWidth: 180,
-    //   editable: true, // Make this column editable
-    //   // Custom cell renderer to display stars
-    //   renderCell: (value) => (
-    //     <StarRatingCell value={value || 0} maxRating={5} />
-    //   ),
-    //   // Custom cell editor using the editableCell prop
-    //   editableCell: ({ value, onSave, onCancel }) => (
-    //     <StarRatingEditor
-    //       config={{
-    //         value: value || 0,
-    //         maxRating: 5,
-    //         onSave: onSave,
-    //         onCancel: onCancel // Pass the onCancel function from the DataGrid
-    //       }}
-    //     />
-    //   ),
-    //   // Validate that the rating is between 0 and 5
-    //   valueValidator: (value) => value >= 0 && value <= 5
-    // },
+    {
+      field: 'rating',
+      headerName: 'Rating',
+      align: 'center',
+      minWidth: 180,
+      editable: true, // Make this column editable
+      // Custom cell renderer to display stars
+      renderCell: (value) => (
+        <StarRatingCell value={value || 0} maxRating={5} />
+      ),
+      // Custom cell editor using the editableCell prop
+      editableCell: ({ value, onSave, onCancel }) => (
+        <StarRatingEditor
+          config={{
+            value: value || 0,
+            maxRating: 5,
+            onSave: onSave,
+            onCancel: onCancel // Pass the onCancel function from the DataGrid
+          }}
+        />
+      ),
+      // Validate that the rating is between 0 and 5
+      valueValidator: (value) => value >= 0 && value <= 5
+    },
   ];
 
   // No need for useEffect since we're initializing the state directly
