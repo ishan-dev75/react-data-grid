@@ -172,45 +172,8 @@ function SelectBox<T>(props: SelectBoxProps<T>) {
         ...restProps
     } = props;
 
-    // Combined CSS styles
+    // Reference to the select component
     const selectRef = useRef<any>(null);
-
-    // Set CSS variables for light mode
-    const lightModeCssVars = {
-        '--selectBackground': '#ffffff',
-        '--selectText': '#171717',
-        '--selectBorder': '#e2e8f0',
-        '--selectBorderHover': '#cbd5e0',
-        '--optionHoverBg': '#f7fafc',
-        '--optionSelectedBg': '#edf2f7',
-        '--multiValueBg': '#edf2f7',
-        '--multiValueText': '#2d3748',
-        '--multiValueRemoveHoverBg': '#e2e8f0',
-    } as React.CSSProperties;
-
-    // CSS variables for dark mode
-    const darkModeCssVars = {
-        '--selectBackground': '#1a202c',
-        '--selectText': '#f7fafc',
-        '--selectBorder': '#4a5568',
-        '--selectBorderHover': '#718096',
-        '--optionHoverBg': '#2d3748',
-        '--optionSelectedBg': '#4a5568',
-        '--multiValueBg': '#4a5568',
-        '--multiValueText': '#f7fafc',
-        '--multiValueRemoveHoverBg': '#718096',
-    } as React.CSSProperties;
-
-    let cssVars = {};
-    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        cssVars = {
-            ...darkModeCssVars,
-        };
-    } else {
-        cssVars = {
-            ...lightModeCssVars,
-        };
-    }
 
     // Focus the select input when the component mounts
     useEffect(() => {
@@ -230,42 +193,78 @@ function SelectBox<T>(props: SelectBoxProps<T>) {
         }
     };
 
+    // Get current theme values for direct use in styles
+    const getThemeValues = () => {
+        if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return {
+                selectBackground: '#1a202c',
+                selectText: '#f7fafc',
+                selectBorder: '#4a5568',
+                selectBorderHover: '#718096',
+                optionHoverBg: '#2d3748',
+                optionSelectedBg: '#4a5568',
+                multiValueBg: '#4a5568',
+                multiValueText: '#f7fafc',
+                multiValueRemoveHoverBg: '#718096',
+            };
+        } else {
+            return {
+                selectBackground: '#ffffff',
+                selectText: '#171717',
+                selectBorder: '#e2e8f0',
+                selectBorderHover: '#cbd5e0',
+                optionHoverBg: '#f7fafc',
+                optionSelectedBg: '#edf2f7',
+                multiValueBg: '#edf2f7',
+                multiValueText: '#2d3748',
+                multiValueRemoveHoverBg: '#e2e8f0',
+            };
+        }
+    };
+
+    const themeValues = getThemeValues();
+
     // Styles for react-select
     const customStyles = {
         control: (base: any) => ({
             ...base,
-            backgroundColor: 'var(--selectBackground)',
-            color: 'var(--selectText)',
-            borderColor: 'var(--selectBorder)',
+            backgroundColor: themeValues.selectBackground,
+            color: themeValues.selectText,
+            borderColor: themeValues.selectBorder,
             '&:hover': {
-                borderColor: 'var(--selectBorderHover)',
+                borderColor: themeValues.selectBorderHover,
             },
         }),
         menu: (base: any) => ({
             ...base,
-            backgroundColor: 'var(--selectBackground)',
+            backgroundColor: themeValues.selectBackground,
+            zIndex: 9999,
+        }),
+        menuPortal: (base: any) => ({
+            ...base,
+            zIndex: 9999,
         }),
         option: (base: any, state: any) => ({
             ...base,
             backgroundColor: state.isSelected
-                ? 'var(--optionSelectedBg)'
+                ? themeValues.optionSelectedBg
                 : state.isFocused
-                    ? 'var(--optionHoverBg)'
-                    : 'var(--selectBackground)',
-            color: 'var(--selectText)',
+                    ? themeValues.optionHoverBg
+                    : themeValues.selectBackground,
+            color: themeValues.selectText,
         }),
         multiValue: (base: any) => ({
             ...base,
-            backgroundColor: 'var(--multiValueBg)',
+            backgroundColor: themeValues.multiValueBg,
         }),
         multiValueLabel: (base: any) => ({
             ...base,
-            color: 'var(--multiValueText)',
+            color: themeValues.multiValueText,
         }),
         multiValueRemove: (base: any) => ({
             ...base,
             '&:hover': {
-                backgroundColor: 'var(--multiValueRemoveHoverBg)',
+                backgroundColor: themeValues.multiValueRemoveHoverBg,
             },
         }),
     };
@@ -301,8 +300,8 @@ function SelectBox<T>(props: SelectBoxProps<T>) {
     } as any;
 
     return (
-        <div className="w-full" style={cssVars as React.CSSProperties} onKeyDown={handleKeyDown}>
-            <Select {...allProps} />
+        <div className="w-full" onKeyDown={handleKeyDown}>
+            <Select {...allProps} menuPortalTarget={document.body} />
         </div>
     );
 }
