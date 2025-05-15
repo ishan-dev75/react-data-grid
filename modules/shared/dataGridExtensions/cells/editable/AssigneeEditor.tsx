@@ -90,14 +90,18 @@ const AssigneeEditor: React.FC<AssigneeEditorProps> = (props) => {
   };
 
   return (
-    <EditableCellWrapper onSave={handleSave} onCancel={onCancel} saveOnBlur={false} className='!p-0'>
+    <EditableCellWrapper onSave={handleSave} onCancel={onCancel} className='!p-0'>
       <SelectBox
         isMulti
         options={userOptions}
         value={selectedOptions}
         onChange={(newValue: any) => handleChange(newValue)}
-        formatOptionLabel={(data) => formatOptionLabel(data as AssigneeOption)}
+        formatOptionLabel={(data: any) => formatOptionLabel(data as AssigneeOption)}
         menuPlacement="auto"
+        showCheckbox={true}
+        hideValueChips={true}
+        hideSelectedOptions={false}
+        placeholder="Search users..."
       />
     </EditableCellWrapper>
   );
