@@ -63,11 +63,13 @@ const Tooltip: React.FC<TooltipProps> = ({
     role,
   ]);
 
-  const tooltipClasses = `
-    z-50 px-2 py-1 text-xs font-medium text-white bg-gray-800
-    rounded shadow-sm pointer-events-none whitespace-nowrap
-    ${className}
-  `;
+  const tooltipClasses = `z-50 px-2 py-1 text-xs font-medium
+    text-black dark:text-white
+    bg-white dark:bg-gray-800
+    rounded
+    shadow-md dark:shadow-lg
+    pointer-events-none whitespace-nowrap
+    ${className}`;
 
   return (
     <>

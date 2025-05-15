@@ -118,7 +118,7 @@ const AssigneeCell: React.FC<AssigneeCellProps> = ({
             className="bg-gray-800 p-2"
           >
             <div className="flex-shrink-0 cursor-pointer flex items-center">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-white bg-gray-500 dark:bg-gray-600 border border-white dark:border-gray-700">
+              <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-white bg-gray-400 dark:bg-gray-600 border border-white dark:border-gray-700">
                 +{remainingCount}
               </div>
             </div>
